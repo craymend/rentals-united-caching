@@ -113,6 +113,8 @@ class Base {
         $currentDB = DB::connection()->getDatabaseName();
         
         // dictionary data
+        RentalsUnited::dataLoader('statuses')->cacheInDb();
+        RentalsUnited::dataLoader('otaPropTypes')->cacheInDb();
         RentalsUnited::dataLoader('amenities')->cacheInDb();
         RentalsUnited::dataLoader('propTypes')->cacheInDb();
         RentalsUnited::dataLoader('locationTypes')->cacheInDb();
@@ -131,6 +133,11 @@ class Base {
         RentalsUnited::dataLoader('languages')->cacheInDb();
         RentalsUnited::dataLoader('propExternalStatuses')->cacheInDb();
         RentalsUnited::dataLoader('changeoverTypes')->cacheInDb();
+        RentalsUnited::dataLoader('additionalFeeTypes')->cacheInDb();
+        RentalsUnited::dataLoader('additionalFeeDiscriminators')->cacheInDb();
+        RentalsUnited::dataLoader('additionalFeeKinds')->cacheInDb();
+        RentalsUnited::dataLoader('cancellationTypes')->cacheInDb();
+        RentalsUnited::dataLoader('quoteModes')->cacheInDb();
         
         echo "Dictionary data cached\r\n";
         

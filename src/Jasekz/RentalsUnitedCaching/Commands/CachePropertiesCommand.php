@@ -98,4 +98,8 @@ class CachePropertiesCommand extends Command {
             array('new', 'new', InputOption::VALUE_NONE),
         );
     }
+
+    public function handle(){
+        $this->fire();
+    }
 }

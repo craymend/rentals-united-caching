@@ -429,7 +429,7 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('SurName');
             $table->string('Email');
             $table->string('Phone');
-            $table->string('ScreenName');
+            $table->string('ScreenName')->nullable();
             $table->timestamps();
         });
         Schema::create('RentalsUnited_Agents', function (Blueprint $table)
@@ -447,8 +447,8 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::create('RentalsUnited_OwnerAgents', function (Blueprint $table)
         {            
             $table->increments('ID');
-            $table->integer('OwnersID');
-            $table->integer('AgentsID');
+            $table->integer('OwnerID');
+            $table->integer('AgentID');
             $table->timestamps();
         });
         Schema::create('RentalsUnited_PropertyExternalListings', function (Blueprint $table)
@@ -523,10 +523,26 @@ class CreateRentalsUnitedTables extends Migration {
 
     private function upDictionaryTables()
     {
+        
+        Schema::create('RentalsUnited_Statuses', function (Blueprint $table)
+        {
+            $table->primary('ID');
+            $table->integer('ID');
+            $table->string('Status');
+            $table->timestamps();
+        });
         Schema::create('RentalsUnited_PropTypes', function (Blueprint $table)
         {
             $table->primary('PropertyTypeID');
             $table->integer('PropertyTypeID');
+            $table->string('PropertyType');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_OTAPropTypes', function (Blueprint $table)
+        {
+            $table->primary('PropertyTypeID');
+            $table->integer('PropertyTypeID');
+            $table->string('OTACode');
             $table->string('PropertyType');
             $table->timestamps();
         });
@@ -570,7 +586,7 @@ class CreateRentalsUnitedTables extends Migration {
         {
             $table->primary('DestinationID');
             $table->integer('DestinationID');
-            $table->string('Destination');
+            $table->string('Destination', 2048);
             $table->timestamps();
         });
         Schema::create('RentalsUnited_DistanceUnits', function (Blueprint $table)
@@ -651,10 +667,47 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('ChangeOverType');
             $table->timestamps();
         });
+        Schema::create('RentalsUnited_AdditionalFeeKinds', function (Blueprint $table)
+        {            
+            $table->primary('ID');
+            $table->integer('ID');
+            $table->string('AdditionalFeeKindInfo');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_AdditionalFeeDiscriminators', function (Blueprint $table)
+        {            
+            $table->primary('ID');
+            $table->integer('ID');
+            $table->string('AdditionalFeeDiscriminatorInfo');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_AdditionalFeeTypes', function (Blueprint $table)
+        {            
+            $table->primary('ID');
+            $table->integer('ID');
+            $table->string('AdditionalFeeTypeInfo');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_CancellationTypes', function (Blueprint $table)
+        {            
+            $table->primary('Id');
+            $table->integer('Id');
+            $table->string('CancellationType');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_QuoteModes', function (Blueprint $table)
+        {            
+            $table->primary('Id');
+            $table->integer('Id');
+            $table->string('QuoteMode');
+            $table->timestamps();
+        });
     }
 
     private function downDictionaryTables()
     {
+        Schema::drop('RentalsUnited_Statuses');
+        Schema::drop('RentalsUnited_OTAPropTypes');
         Schema::drop('RentalsUnited_PropTypes');
         Schema::drop('RentalsUnited_LocationTypes');
         Schema::drop('RentalsUnited_Locations');
@@ -673,5 +726,10 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::drop('RentalsUnited_Languages');
         Schema::drop('RentalsUnited_PropExternalStatuses');
         Schema::drop('RentalsUnited_ChangeoverTypes');
+        Schema::drop('RentalsUnited_AdditionalFeeKinds');
+        Schema::drop('RentalsUnited_AdditionalFeeDiscriminators');
+        Schema::drop('RentalsUnited_AdditionalFeeTypes');
+        Schema::drop('RentalsUnited_CancellationTypes');
+        Schema::drop('RentalsUnited_QuoteModes');
     }
 }

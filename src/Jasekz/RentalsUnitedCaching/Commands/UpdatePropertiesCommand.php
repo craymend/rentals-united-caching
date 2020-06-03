@@ -71,4 +71,8 @@ class UpdatePropertiesCommand extends Command {
             array('since', 'since', InputOption::VALUE_OPTIONAL),
         );
     }
+
+    public function handle(){
+        $this->fire();
+    }
 }

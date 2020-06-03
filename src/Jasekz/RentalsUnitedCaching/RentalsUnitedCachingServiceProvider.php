@@ -43,19 +43,19 @@ class RentalsUnitedCachingServiceProvider extends ServiceProvider {
             return new RentalsUnitedCaching($app);
         });
         
-        $this->app->bindShared('command.ru.cache_all', function ($app) {
+        $this->app->singleton('command.ru.cache_all', function ($app) {
             return new CacheAllCommand();
         });
         
-        $this->app->bindShared('command.ru.cache_properties', function ($app) {
+        $this->app->singleton('command.ru.cache_properties', function ($app) {
             return new CachePropertiesCommand();
         });
         
-        $this->app->bindShared('command.ru.update_change_log', function ($app) {
+        $this->app->singleton('command.ru.update_change_log', function ($app) {
             return new UpdateChangeLogCommand();
         });
         
-        $this->app->bindShared('command.ru.update_properties', function ($app) {
+        $this->app->singleton('command.ru.update_properties', function ($app) {
             return new UpdatePropertiesCommand();
         });
     }

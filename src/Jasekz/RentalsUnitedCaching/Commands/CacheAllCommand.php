@@ -43,4 +43,8 @@ class CacheAllCommand extends Command {
         // Cache from RU
         RentalsUnited::dataLoader()->cacheAll();
     }
+
+    public function handle(){
+        $this->fire();
+    }
 }

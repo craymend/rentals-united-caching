@@ -305,7 +305,7 @@ class RentalsUnited {
     * @param mixed $debug
     */         
                   
-    function curlPushBack($url, $post_fields = "", $head = 0, $follow = 1, $header="", $referer="", $is_ssl = false, $debug = 0){
+    function curlPushBack($url, $post_fields = "", $head = 0, $follow = 1, $header=[], $referer="", $is_ssl = false, $debug = 0){
 
         $ch = curl_init ();
 

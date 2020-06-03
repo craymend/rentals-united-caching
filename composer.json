@@ -12,5 +12,15 @@
     "require": {},
     "autoload": {
         "psr-0": {"Jasekz\\RentalsUnitedCaching": "src/"}
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jasekz\\RentalsUnitedCaching\\RentalsUnitedCachingServiceProvider"
+            ],
+            "aliases": {
+                "RentalsUnited": "Jasekz\\RentalsUnitedCaching\\RentalsUnitedCachingFacade"
+            }
+        }
     }
 }
