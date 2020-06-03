@@ -7,27 +7,26 @@ Synchronize [Rentals United](http://rentalsunited.com/) data with your local dat
 
 ## Installation
 
-NOTE: If you haven't set up a database yet for your app, please do that first as per Laravel docs -  http://laravel.com/docs/5.0/database.
+NOTE: If you haven't set up a database yet for your app, please do that first as per Laravel docs -  https://laravel.com/docs/5.5/database.
 
 Via composer
+Add the following to your composer.json
 ```
-composer require jasekz/rentals-united-caching
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/craymend/rentals-united-caching.git"
+    }
+],
+"require": {
+    "jasekz/rentals-united-caching": "dev-master"
+},
 ```
 ```
 composer update
 ```
 
-Then in your `config/app.php` add 
-```php
-    'Jasekz\RentalsUnitedCaching\RentalsUnitedCachingServiceProvider'
-```    
-to the `providers` array and
-```php
-    'RentalsUnited' => 'Jasekz\RentalsUnitedCaching\RentalsUnitedCachingFacade'
-```
-to the `aliases` array.
-
-Finally, run 
+Run 
 
     artisan vendor:publish
     
