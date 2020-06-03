@@ -9,7 +9,7 @@ Synchronize [Rentals United](http://rentalsunited.com/) data with your local dat
 
 NOTE: If you haven't set up a database yet for your app, please do that first as per Laravel docs -  https://laravel.com/docs/5.5/database.
 
-Via composer
+Via composer.<br/>
 Add the following to your composer.json
 ```
 "repositories": [
