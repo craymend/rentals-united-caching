@@ -139,23 +139,12 @@ class CreateRentalsUnitedTables extends Migration {
             $table->integer('LastMinute');
             $table->timestamps();
         });
-        Schema::create('RentalsUnited_Reservations', function (Blueprint $table) // NOT IMPLEMEMTED
+        Schema::create('RentalsUnited_Reservations', function (Blueprint $table)
         {            
             $table->increments('ID');
             $table->integer('ReservationID');
-            $table->integer('Status');
+            $table->integer('StatusID');
             $table->datetime('LastMod');
-            $table->integer('PropID');
-            $table->date('DateFrom');
-            $table->date('DateTo');
-            $table->integer('NumberOfGuests');
-            $table->float('RUPrice');
-            $table->float('ClientPrice');
-            $table->float('AlreadyPaid');
-            $table->integer('StayID');
-            $table->integer('HotelID');
-            $table->integer('RoomID');
-            $table->integer('RateID');
             $table->string('CustomerName');
             $table->string('CustomerSurName');
             $table->string('CustomerEmail');
@@ -164,15 +153,41 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('CustomerAddress');
             $table->string('CustomerZipCode');
             $table->string('CustomerCountryID');
+            $table->string('CustomerPassport');
             $table->string('Creator');
             $table->text('Comments');
             $table->string('CCNumber');
             $table->string('CVC');
-            $table->string('NameOnCard');
+            $table->string('NameOnCard', 400);
             $table->string('Expiration');
-            $table->string('BillingAddress');
+            $table->string('BillingAddress', 400);
             $table->string('CardType');
-            $table->text('CCComments');
+            $table->text('CCComments', 400);
+            $table->string('PMSReservationId');
+            $table->integer('CancelTypeID')->nullable();
+            $table->integer('IsArchived');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_ReservationStayInfos', function (Blueprint $table)
+        {            
+            $table->increments('ID');
+            $table->integer('ReservationID');
+            $table->integer('PropID');
+            $table->string('XmlApartmentID');
+            $table->date('DateFrom');
+            $table->date('DateTo');
+            $table->integer('NumberOfGuests');
+            $table->float('CostRUPrice');
+            $table->float('CostClientPrice');
+            $table->float('CostAlreadyPaid');
+            $table->integer('ResApaID');
+            $table->string('Comments', 500);
+            $table->string('MappingReservationID');
+            $table->string('MappingStayID');
+            $table->string('MappingHotelID');
+            $table->string('MappingRoomID');
+            $table->string('MappingRateID');
+            $table->integer('Units');
             $table->timestamps();
         });
         Schema::create('RentalsUnited_PropertyChangeLog', function (Blueprint $table)
@@ -248,6 +263,7 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::drop('RentalsUnited_PropertyDiscountsLongStays');
         Schema::drop('RentalsUnited_PropertyDiscountsLastMinutes');
         Schema::drop('RentalsUnited_Reservations');
+        Schema::drop('RentalsUnited_ReservationStayInfos');
         Schema::drop('RentalsUnited_PropertyChangeLog');
         Schema::drop('RentalsUnited_PropertyPriceChanges');
         Schema::drop('RentalsUnited_PropertyAvbChanges');
@@ -270,13 +286,15 @@ class CreateRentalsUnitedTables extends Migration {
             $table->integer('LocationTypeID');
             $table->datetime('LastMod');
             $table->integer('LastModNLA');
-            $table->integer('IMAP');
+            $table->integer('IMAP')->nullable();
             $table->date('DateCreated');
             $table->float('CleaningPrice');
             $table->integer('Space');
             $table->integer('StandardGuests');
             $table->integer('CanSleepMax');
             $table->integer('PropertyTypeID');
+            $table->integer('ObjectTypeID');
+            $table->integer('NoOfUnits');
             $table->integer('Floor');
             $table->string('Street');
             $table->string('ZipCode');
@@ -292,6 +310,8 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('Place');
             $table->integer('DepositTypeID');
             $table->float('Deposit');
+            $table->integer('PreparationTimeBeforeArrival')->nullable();
+            $table->integer('NumberOfStars')->nullable();
             $table->timestamps();
         });
         Schema::create('RentalsUnited_PropDistances', function (Blueprint $table)
@@ -344,6 +364,28 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('Email');
             $table->string('Phone');
             $table->integer('DaysBeforeArrival');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_PropLicenceInfo', function (Blueprint $table)
+        {            
+            $table->increments('ID');
+            $table->integer('PropID');
+            $table->string('LicenceNumber');
+            $table->date('IssueDate')->nullable();
+            $table->date('ExpirationDate')->nullable();
+            $table->integer('IsExempt')->nullable();
+            $table->integer('IsVATRegistered')->nullable();
+            $table->string('ExemptionReason')->nullable();
+            $table->integer('IsManagedByOwner')->nullable();
+            $table->integer('IsManagedByPrivatePerson')->nullable();
+            $table->string('BrazilianCityHallInfoId')->nullable();
+            $table->string('JapaneseLicenceInfo')->nullable();
+            $table->integer('FrenchIsRegisteredAtTradeCommercialRegister')->nullable();
+            $table->string('FrenchPropertyTypeForTaxPurposes')->nullable();
+            $table->integer('FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes')->nullable();
+            $table->integer('FrenchTypeOfResidence')->nullable();
+            $table->integer('FrenchCityTaxCategory')->nullable();
+            $table->string('TasmanianLicenceInfoTypeOfResidence')->nullable();
             $table->timestamps();
         });
         Schema::create('RentalsUnited_PropHowToArriveText', function (Blueprint $table)
@@ -502,6 +544,7 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::drop('RentalsUnited_PropAmenities');
         Schema::drop('RentalsUnited_PropImages');
         Schema::drop('RentalsUnited_PropArrivalInstructions');
+        Schema::drop('RentalsUnited_PropLicenceInfo');
         Schema::drop('RentalsUnited_PropHowToArriveText');
         Schema::drop('RentalsUnited_PropPickupServiceText');
         Schema::drop('RentalsUnited_PropLateArrivalFees');

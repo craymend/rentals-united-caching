@@ -291,6 +291,31 @@ class RentalsUnited {
         $x = $this->curlPushBack($this->server_url,$post);
         return $x;
     }   
+
+    /**
+    * Get reservations
+    * 
+    * @param string $dateFrom
+    * @param string $dateTo
+    * @return SimpleXMLElement
+    */
+    function ListReservations($dateFrom, $dateTo){
+      $dateFrom = $dateFrom ? $dateFrom : date('Y-m-d h:i:s');
+      $dateTo = $dateTo ? $dateTo : date('Y-m-d h:i:s');
+
+      $post[] = "<Pull_ListReservations_RQ>
+              <Authentication>
+                <UserName>".$this->username."</UserName>
+                <Password>".$this->password."</Password>
+              </Authentication>
+              <DateFrom>" . $dateFrom . "</DateFrom>
+              <DateTo>" . $dateTo . "</DateTo>
+              <LocationID>0</LocationID>
+          </Pull_ListReservations_RQ>";
+
+      $x = $this->curlPushBack($this->server_url,$post);
+      return $x;
+  }   
     
     /**
     * Default Curl connection

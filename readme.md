@@ -49,6 +49,7 @@ XML_CACHE_DIR='/path/to/cache/directory/'
 - artisan **rentals_united:update_change_log --since="2014-03-26 12:51:00"** // check for updates 'since' given date/time
 - artisan **rentals_united:update_properties --since="-1 month"** // update properties which changed 'since' given date/time
 - artisan **rentals_united:update_properties --since="2014-03-26 12:51:00"** // update properties which changed 'since' given date/time
+- artisan **rentals_united:update_reservations --since="-7 days"** // update reservations which changed 'since' given date/time
 
 
 ## License

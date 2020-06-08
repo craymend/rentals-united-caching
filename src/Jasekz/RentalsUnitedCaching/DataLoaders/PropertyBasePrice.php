@@ -81,9 +81,9 @@ class PropertyBasePrice extends Base {
                             created_at=?;";
                 DB::statement($sql, array(
                     $propertyId,
-                    (string) $i,
-                    (string) $lowestPrice,
-                    (string) $lowestPriceExtra,                    
+                    (string) $i, 
+                    (string) $lowestPrice ? $lowestPrice : 0,
+                    (string) $lowestPriceExtra ? $lowestPrice : 0,
                     date('Y-m-d G:i:s')
                 ));
             }

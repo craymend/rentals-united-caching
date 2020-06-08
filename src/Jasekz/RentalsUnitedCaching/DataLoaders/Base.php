@@ -38,15 +38,16 @@ class Base {
      * @throws Exception
      * @return void
      */
-    public function downloadXML($fileName, $arg1 = null)
+    // public function downloadXML($fileName, $arg1 = null)
+    public function downloadXML($fileName, ...$args)
     {
         try {
-            $xml = $this->ru->{$this->ruFunction}($arg1);
+            $xml = $this->ru->{$this->ruFunction}(...$args);
             
             $obj = simplexml_load_string($xml['messages']);
             
             if ((string) $obj->Status != 'Success') {
-                throw new Exception('Error downloading xml file.');
+                throw new Exception('Error downloading xml file. "' . $obj . '"');
             }
             echo "FileName (downloadXML): {$fileName}\r\n";
                 
@@ -165,7 +166,7 @@ class Base {
         // properties
         $properties = RentalsUnited::prop()->all();
         $count = 0;
-        if (! $properties->isEmpty()) {
+        if (!$properties->isEmpty()) {
             echo "Total properties to cache: {$properties->count()}\r\n";
             foreach ($properties as $property) {
                 
@@ -184,6 +185,9 @@ class Base {
                 }
             }
         }
+
+        // reservations
+        RentalsUnited::dataLoader('reservations')->cacheInDb();
         
         echo "Finished.  Total properties cached: {$count}\r\n";
     }
@@ -204,7 +208,7 @@ class Base {
             RentalsUnited::dataLoader('propertyChangeLog')->cacheInDb($propertyID);
             $this->cachePropAvb($propertyID);
             $this->cachePropPricing($propertyID);
-        } 
+        }
 
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
@@ -246,8 +250,26 @@ class Base {
             RentalsUnited::dataLoader('propertyBlocks')->cacheInDb($propertyID);
             RentalsUnited::dataLoader('propertyAvailabilityCalendar')->cacheInDb($propertyID);
             RentalsUnited::dataLoader('propertyMinStay')->cacheInDb($propertyID);
-        } 
+        }
 
+        catch (Exception $e) {
+            echo "Exception: {$e->getMessage()}\r\n";
+            throw $e;
+        }
+    }
+
+    /**
+     * Cache property availability
+     *
+     * @param string $dateFrom
+     * @param string $dateTo
+     * @return void
+     */
+    public function cacheReservations($dateFrom, $dateTo)
+    {
+        try {
+            RentalsUnited::dataLoader('reservations')->cacheInDb($dateFrom, $dateTo);
+        }
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
             throw $e;
@@ -273,7 +295,6 @@ class Base {
         }
         
         foreach ($results->get() as $result) {
-            
             try {
                 echo "Updating change log for {$result->prop->ID}\r\n";
                 RentalsUnited::dataLoader('propertyChangeLog')->cacheInDb($result->prop->ID);
@@ -325,7 +346,7 @@ class Base {
         $lastCached = $lastCached ? $lastCached : date('Y-m-d G:i:s');
         $cached = false;
 
-        // avb        
+        // avb
         $results = RentalsUnited::changeLog()->where('Availability', '>', $lastCached)->orderBy('PropID');
         if ($results->count() == 0) {
             echo "No availability to update for any properties.\r\n";
@@ -349,7 +370,7 @@ class Base {
         }
         
         
-        // pricing         
+        // pricing
         $results = RentalsUnited::changeLog()->where('Pricing', '>', $lastCached)->orderBy('PropID');
         if ($results->count() == 0) {
             echo "No pricing to update for any properties.\r\n";
@@ -371,7 +392,6 @@ class Base {
                 }
             }
         }
-        
         
         // static         
         $results = RentalsUnited::changeLog()->where('StaticData', '>', $lastCached)->orderBy('PropID');
@@ -397,5 +417,16 @@ class Base {
         if (! $cached) {
             echo "No properties to update\r\n";
         }
+    }
+
+    /**
+     * Run reservation updates
+     *
+     * @param $lastCached - Check for changes since this date
+     * @return void
+     */
+    public function updateReservations($dateFrom=null, $dateTo=null)
+    {
+        $this->cacheReservations($dateFrom, $dateTo);
     }
 }

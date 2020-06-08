@@ -67,6 +67,7 @@ class Prop extends Base {
         try {
             $this->property = $this->getFileContents($fileName)->Property;
             $this->cacheProperty();
+            $this->cachePropertyLicenceInfo();
             $this->cachePropertyDistances();
             $this->cachePropertyCompositionRooms();
             $this->cachePropertyCompositionRoomAmenities();
@@ -93,6 +94,11 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->CompositionRoomsAmenities){
+            // no CompositionRoomsAmenities
+            return;
+        }
         
         foreach ($this->property->CompositionRoomsAmenities->CompositionRoomAmenities as $room) {
             
@@ -363,9 +369,11 @@ class Prop extends Base {
         ));
         
         $compositionRooms = [];
-        
-        foreach ($this->property->CompositionRooms->CompositionRoomID as $compositionRoom) {          
+
+        if($this->property->CompositionRooms){
+            foreach ($this->property->CompositionRooms->CompositionRoomID as $compositionRoom) {          
                 $compositionRooms[(int) $compositionRoom]['count'] = (int) $compositionRoom->attributes()->Count;
+            }
         }
         
         // Some properties have compositionRoomAmenities, but no composition rooms;
@@ -398,6 +406,61 @@ class Prop extends Base {
                 ));
             }
         }
+    }
+
+    private function cachePropertyLicenceInfo(){
+        $sql = "delete from RentalsUnited_PropLicenceInfo where PropID=?;";
+        DB::statement($sql, array(
+            (string) $this->property->ID
+        ));
+
+        $licenceInfo = $this->property->LicenceInfo;
+
+        if(!$licenceInfo){
+            // property has no LicenceInfo
+            return;
+        }
+        
+        $sql = "insert into RentalsUnited_PropLicenceInfo 
+                set PropID=?,
+                    LicenceNumber=?,
+                    IssueDate=?,
+                    ExpirationDate=?,
+                    IsExempt=?,
+                    IsVATRegistered=?,
+                    ExemptionReason=?,
+                    IsManagedByOwner=?,
+                    IsManagedByPrivatePerson=?,
+                    BrazilianCityHallInfoId=?,
+                    JapaneseLicenceInfo=?,
+                    FrenchIsRegisteredAtTradeCommercialRegister=?,
+                    FrenchPropertyTypeForTaxPurposes=?,
+                    FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes=?,
+                    FrenchTypeOfResidence=?,
+                    FrenchCityTaxCategory=?,
+                    TasmanianLicenceInfoTypeOfResidence=?,
+                    created_at=?";
+
+        DB::statement($sql, array(
+            (string) $this->property->ID,
+            (string) $licenceInfo->LicenceNumber,
+            (string) $licenceInfo->IssueDate ? $licenceInfo->IssueDate : null,
+            (string) $licenceInfo->ExpirationDate ? $licenceInfo->ExpirationDate : null,
+            (string) $licenceInfo->IsExempt ? $licenceInfo->IsExempt : null,
+            (string) $licenceInfo->IsVATRegistered ? $licenceInfo->IsVATRegistered : null,
+            (string) $licenceInfo->ExemptionReason ? $licenceInfo->ExemptionReason : null,
+            (string) $licenceInfo->IsManagedByOwner ? $licenceInfo->IsManagedByOwner : null,
+            (string) $licenceInfo->IsManagedByPrivatePerson ? $licenceInfo->IsManagedByPrivatePerson : null,
+            (string) $licenceInfo->BrazilianCityHallInfoId ? $licenceInfo->BrazilianCityHallInfoId : null,
+            (string) $licenceInfo->JapaneseLicenceInfo ? $licenceInfo->JapaneseLicenceInfo : null,
+            (string) $licenceInfo->FrenchIsRegisteredAtTradeCommercialRegister ? $licenceInfo->FrenchIsRegisteredAtTradeCommercialRegister : null,
+            (string) $licenceInfo->FrenchPropertyTypeForTaxPurposes ? $licenceInfo->FrenchPropertyTypeForTaxPurposes : null,
+            (string) $licenceInfo->FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes ? $licenceInfo->FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes : null,
+            (string) $licenceInfo->FrenchTypeOfResidence ? $licenceInfo->FrenchTypeOfResidence : null,
+            (string) $licenceInfo->FrenchCityTaxCategory ? $licenceInfo->FrenchCityTaxCategory : null,
+            (string) $licenceInfo->TasmanianLicenceInfoTypeOfResidence ? $licenceInfo->TasmanianLicenceInfoTypeOfResidence : null,
+            date('Y-m-d G:i:s')
+        ));
     }
 
     private function cachePropertyDistances()
@@ -436,9 +499,13 @@ class Prop extends Base {
                     set ID=?,
                         PUID=?,
                         Name=?,
+                        BuildingID=?,
+                        BuildingName=?,
                         OwnerID=?,
                         DetailedLocationID=?,
+                        LocationTypeID=?,
                         LastMod=?,
+                        LastModNLA=?,
                         IMAP=?,
                         IsActive=?,
                         IsArchived=?,
@@ -447,6 +514,8 @@ class Prop extends Base {
                         StandardGuests=?,
                         CanSleepMax=?,
                         PropertyTypeID=?,
+                        ObjectTypeID=?,
+                        NoOfUnits=?,
                         Floor=?,
                         Street=?,
                         ZipCode=?,
@@ -461,23 +530,31 @@ class Prop extends Base {
                         Place=?,
                         Deposit=?,
                         DepositTypeID=?,
+                        PreparationTimeBeforeArrival=?,
+                        NumberOfStars=?,
                         created_at=?;";
-        
+
         DB::statement($sql, array(
             (string) $this->property->ID,
             (string) $this->property->PUID,
             (string) $this->property->Name,
+            (string) $this->property->ID->attributes()->BuildingID,
+            (string) $this->property->ID->attributes()->BuildingName,
             (string) $this->property->OwnerID,
             (string) $this->property->DetailedLocationID,
+            (string) $this->property->DetailedLocationID->attributes()->TypeID,
             (string) $this->property->LastMod,
-            (string) $this->property->IMAP,
-            (string) $this->property->IsActive,
-            (string) $this->property->IsArchived,
+            (string) $this->property->LastMod->attributes()->NLA ? 1 : 0,
+            (string) $this->property->IMAP ? $this->property->IMAP : null,
+            (string) $this->property->IsActive ? 1 : 0,
+            (string) $this->property->IsArchived ? 1 : 0,
             (string) $this->property->CleaningPrice,
             (string) $this->property->Space,
             (string) $this->property->StandardGuests,
             (string) $this->property->CanSleepMax,
             (string) $this->property->PropertyTypeID,
+            (string) $this->property->ObjectTypeID,
+            (string) $this->property->NoOfUnits,
             (string) $this->property->Floor,
             (string) $this->property->Street,
             (string) $this->property->ZipCode,
@@ -492,6 +569,8 @@ class Prop extends Base {
             (string) $this->property->CheckInOut->Place,
             (string) $this->property->Deposit,
             (string) $this->property->Deposit->attributes()->DepositTypeID,
+            (string) $this->property->PreparationTimeBeforeArrival ? $this->property->PreparationTimeBeforeArrival : null,
+            (string) $this->property->NumberOfStars ? $this->property->NumberOfStars : null,
             date('Y-m-d G:i:s')
         ));
     }
@@ -505,7 +584,7 @@ class Prop extends Base {
     public function get($propertyID = null)
     {
         try {
-            if (! $propertyID) {
+            if (!$propertyID) {
                 throw new Exception('First arg to get() must by propertyID.');
             }
             
