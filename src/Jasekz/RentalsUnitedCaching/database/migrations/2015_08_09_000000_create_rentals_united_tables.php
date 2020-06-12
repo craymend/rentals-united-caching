@@ -119,6 +119,17 @@ class CreateRentalsUnitedTables extends Migration {
             $table->float('SecurityDeposit');
             $table->timestamps();
         });
+        Schema::create('RentalsUnited_PropertyFSPPrices', function (Blueprint $table)
+        {            
+            $table->increments('ID');
+            $table->integer('PropID');
+            $table->date('FSPSeasonDate');
+            $table->float('FSPSeasonDefaultPrice');
+            $table->integer('NrOfGuests');
+            $table->integer('NrOfNights');
+            $table->float('Price');
+            $table->timestamps();
+        });
         Schema::create('RentalsUnited_PropertyDiscountsLongStays', function (Blueprint $table)
         {            
             $table->increments('ID');
@@ -262,6 +273,7 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::drop('RentalsUnited_PropertyPricesLOSP');
         Schema::drop('RentalsUnited_PropertyPricesEGP');
         Schema::drop('RentalsUnited_PropertyAVBPrice');
+        Schema::drop('RentalsUnited_PropertyFSPPrices');
         Schema::drop('RentalsUnited_PropertyDiscountsLongStays');
         Schema::drop('RentalsUnited_PropertyDiscountsLastMinutes');
         Schema::drop('RentalsUnited_Reservations');

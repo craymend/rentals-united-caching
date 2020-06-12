@@ -278,7 +278,7 @@ class RentalsUnited {
     * @return SimpleXMLElement
     */
 
-    function ListPropertyPrices($pid, $dateFrom, $dateTo){
+    function ListPropertyPrices($pid, $dateFrom, $dateTo, $pricingModelMode=0){
         $post[] = "<Pull_ListPropertyPrices_RQ>
                 <Authentication>
                   <UserName>".$this->username."</UserName>
@@ -287,6 +287,7 @@ class RentalsUnited {
                 <PropertyID>$pid</PropertyID>
                 <DateFrom>$dateFrom</DateFrom>
                 <DateTo>$dateTo</DateTo>
+                <PricingModelMode>$pricingModelMode</PricingModelMode>
               </Pull_ListPropertyPrices_RQ>";
         $x = $this->curlPushBack($this->server_url,$post);
         return $x;

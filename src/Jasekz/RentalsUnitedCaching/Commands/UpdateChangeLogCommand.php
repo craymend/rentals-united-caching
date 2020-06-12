@@ -39,10 +39,7 @@ class UpdateChangeLogCommand extends Command {
      * @return mixed
      */
     public function fire()
-    {        
-        $datetime = null;
-        
-        
+    {   
         /*
          * Option to check for updates 'since' given date/time
          * Argument passed in can be an valid php strtotime arg - http://php.net/manual/en/function.strtotime.php
@@ -53,12 +50,20 @@ class UpdateChangeLogCommand extends Command {
          * 
          * When no option is passed, the default is -10 minutes
          */ 
+
+        $this->info(date('Y-m-d H:i:s', time()));
+        $this->info("\tUpdate RU changelog");
+
+        $datetime = null;
+
         if($this->option('since')) {
             $datetime = date('Y-m-d H:i:s', strtotime($this->option('since')));
         }
         
         // Update change logs for all properties
         RentalsUnited::dataLoader()->updateChangeLog( $datetime );
+
+        $this->info(""); // newline
     }
  
     /**

@@ -50,12 +50,15 @@ class CachePropertiesCommand extends Command {
          * 
          */ 
 
+        $this->info(date('Y-m-d H:i:s', time()));
+        $this->info("\tCache RU properties");
+
         $ids = null;
         if($this->option('id')) {
             $ids = explode(',', $this->option('id'));
         }
         
-        if( ! $ids && ! $this->option('new')) {
+        if(!$ids && !$this->option('new')) {
             die("Please specify property id(s):\r\n"
                 . "Examples:\r\n"
                 . "artisan rentals_united:cache_properties --id=4 // cache property (ID) 4\r\n"
@@ -84,6 +87,8 @@ class CachePropertiesCommand extends Command {
                 RentalsUnited::dataLoader()->cacheProp($id);
             }
         }
+
+        $this->info(""); // newline
     }
  
     /**

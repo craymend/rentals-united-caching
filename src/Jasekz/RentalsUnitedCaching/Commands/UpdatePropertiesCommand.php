@@ -54,10 +54,17 @@ class UpdatePropertiesCommand extends Command {
          */ 
         if($this->option('since')) {
             $datetime = date('Y-m-d H:i:s', strtotime($this->option('since')));
+        }else{
+            $datetime = date('Y-m-d H:i:s', strtotime('-1 day'));
         }
+
+        $this->info(date('Y-m-d H:i:s', time()));
+        $this->info("\tUpdate RU property data using changelog since {$datetime}");
           
         // Update change logs for all properties
         RentalsUnited::dataLoader()->updateProperties( $datetime );
+
+        $this->info(""); // newline
     }
  
     /**

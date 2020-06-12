@@ -248,7 +248,6 @@ class Base {
         try {
             RentalsUnited::dataLoader('propertyAVBPrice')->cacheInDb($propertyID, date('Y-m-d'), date('Y-m-d', strtotime('+1 year')));
         } 
-
         catch (Exception $e) {
             echo 'propertyAVBPrice: ' . $e->getMessage() . ' ' . date('Y-m-d') . ' through ' . date('Y-m-d', strtotime('+1 year')) . "\r\n";
         }

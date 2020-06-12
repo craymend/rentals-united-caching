@@ -35,9 +35,24 @@ class PropertyPrices extends Base {
      */
     public function cacheInDb($propertyId = null)
     {
+        $this->cacheStandardPricing($propertyId);
+        $this->cacheFspPricing($propertyId);
+    }
+
+    /**
+     *  Cache standard/length of stay (LOS) pricing
+     * 
+     * @throws Exception
+     * @return void
+     */
+    public function cacheStandardPricing($propertyId = null){
         $fileName = 'PropertyID_' . $propertyId . '_' . $this->fileName;
+
+        $dateFrom = date('Y-m-d');
+        $dateTo = date('Y-m-d', strtotime('+1 year'));
+        $pricingModelMode = 0; // standard/length of stay (LOS) pricing
         
-        $this->downloadXML($fileName, $propertyId, date('Y-m-d'), date('Y-m-d', strtotime('+1 year')));
+        $this->downloadXML($fileName, $propertyId, $dateFrom, $dateTo, $pricingModelMode);
         
         try {
             DB::statement("delete from {$this->table} where PropID=?", array(
@@ -54,7 +69,6 @@ class PropertyPrices extends Base {
             ));
             
             foreach ($this->getFileContents($fileName)->Prices->Season as $record) {
-                
                 $sql = "insert into 
                         {$this->table} 
                         set PropID=?, 
@@ -148,6 +162,65 @@ class PropertyPrices extends Base {
     }
 
     /**
+     * Cache full stay pricing (FSP)
+     * 
+     * @throws Exception
+     * @return void
+     */
+    public function cacheFspPricing($propertyId = null){
+        $fileName = 'PropertyID_' . $propertyId . '_' . $this->fileName;
+
+        $dateFrom = date('Y-m-d');
+        $dateTo = date('Y-m-d', strtotime('+1 year'));
+        $pricingModelMode = 1; // standard/length of stay (LOS) pricing
+        
+        $this->downloadXML($fileName, $propertyId, $dateFrom, $dateTo, $pricingModelMode);
+        
+        try {
+            DB::statement("delete from RentalsUnited_PropertyFSPPrices where PropID=?", array(
+                $propertyId
+            ));
+            
+            foreach ($this->getFileContents($fileName)->Prices->FSPSeasons->FSPSeason as $fspSeason) {
+                $fspDate = $fspSeason->attributes()->Date;
+                $defaultPrice = $fspSeason->attributes()->DefaultPrice;
+
+                foreach ($fspSeason->FSPRows->FSPRow as $fspRow) {
+                    $nrOfGuests = $fspRow->attributes()->NrOfGuests;
+
+                    foreach ($fspRow->Prices->Price as $price) {
+                        $sql = "insert into 
+                                    RentalsUnited_PropertyFSPPrices 
+                                set PropID=?,
+                                    FSPSeasonDate=?,
+                                    FSPSeasonDefaultPrice=?,
+                                    NrOfGuests=?,
+                                    NrOfNights=?,
+                                    Price=?,
+                                    created_at=?;";
+
+                        DB::statement($sql, array(
+                            $propertyId,
+                            (string) $fspDate,
+                            (string) $defaultPrice,
+                            (string) $nrOfGuests,
+                            (string) $price->attributes()->NrOfNights,
+                            (string) $price,
+                            date('Y-m-d H:i:s')
+                        ));
+                    }
+                }
+            }
+            
+            $this->deleteXML($fileName);
+        } 
+
+        catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Download and store XML file from RU
      * Each service can override this function and provde the RU service that should be called, if needed
      *
@@ -156,10 +229,10 @@ class PropertyPrices extends Base {
      * @throws Exception
      * @return void
      */
-    public function downloadXML($fileName, $propertyId = null, $dateFrom = null, $dateTo = null)
+    public function downloadXML($fileName, $propertyId = null, $dateFrom = null, $dateTo = null, $pricingModelMode=0)
     {
         try {
-            $xml = $this->ru->{$this->ruFunction}($propertyId, $dateFrom, $dateTo);
+            $xml = $this->ru->{$this->ruFunction}($propertyId, $dateFrom, $dateTo, $pricingModelMode);
             
             $obj = simplexml_load_string($xml['messages']);
             
