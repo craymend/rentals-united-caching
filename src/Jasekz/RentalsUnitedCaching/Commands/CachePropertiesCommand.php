@@ -76,7 +76,6 @@ class CachePropertiesCommand extends Command {
                     }
                 }
             }
-            
             catch (Exception $e) {
                 die($e->getMessage());
             }

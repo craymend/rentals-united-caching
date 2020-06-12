@@ -14,11 +14,10 @@ class RentalsUnited {
     }
   
     /**
-    * Get a list of all the location where properties are provided
-    * 
-    * @return SimpleXMLElement
-    */
-    
+     * Get a list of all the location where properties are provided
+     * 
+     * @return SimpleXMLElement
+     */
     public function __call($name, $args){
 
         $post[] = "<Pull_{$name}_RQ>
@@ -32,12 +31,11 @@ class RentalsUnited {
     }    
 
     /**
-    * Get properties from a specific owner from getOwners()
-    * 
-    * @param mixed $ownerid, owner ID
-    * @return SimpleXMLElement
-    */
-    
+     * Get properties from a specific owner from getOwners()
+     * 
+     * @param mixed $ownerid, owner ID
+     * @return SimpleXMLElement
+     */
     function ListOwnerProp($ownerid){
         $post[] = "<Pull_ListOwnerProp_RQ>
                   <Authentication>
@@ -51,12 +49,11 @@ class RentalsUnited {
     } 
 
     /**
-    * Get all property details based on a property ID from getPropertiesList()
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get all property details based on a property ID from getPropertiesList()
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyBasePrice($pid){
         $post[] = "<Pull_ListPropertyBasePrice_RQ>
                 <Authentication>
@@ -70,12 +67,11 @@ class RentalsUnited {
     }   
 
     /**
-    * Get all property details based on a property ID from getPropertiesList()
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get all property details based on a property ID from getPropertiesList()
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListSpecProp($pid){
         $post[] = "<Pull_ListSpecProp_RQ>
                 <Authentication>
@@ -89,12 +85,11 @@ class RentalsUnited {
     }      
 
     /**
-    * Get all property details based on a property ID from getPropertiesList()
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get all property details based on a property ID from getPropertiesList()
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropByCreationDate($from, $to, $includeNLA = false){
         $post[] = "<Pull_ListPropByCreationDate_RQ>
                 <Authentication>
@@ -110,12 +105,11 @@ class RentalsUnited {
     }   
 
     /**
-    * Get all property details based on a property ID from getPropertiesList()
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get all property details based on a property ID from getPropertiesList()
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function GetPropertyExternalListing($pid){
         $post[] = "<Pull_GetPropertyExternalListing_RQ>
                 <Authentication>
@@ -131,12 +125,11 @@ class RentalsUnited {
     }     
 
     /**
-    * Get all property details based on a property ID from getPropertiesList()
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get all property details based on a property ID from getPropertiesList()
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyDiscounts($pid){
         $post[] = "<Pull_ListPropertyDiscounts_RQ>
                 <Authentication>
@@ -150,12 +143,11 @@ class RentalsUnited {
     }      
 
     /**
-    * Get all property details based on a property ID from getPropertiesList()
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get all property details based on a property ID from getPropertiesList()
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyChangeLog($pid){
         $post[] = "<Pull_ListPropertyChangeLog_RQ>
                 <Authentication>
@@ -169,12 +161,11 @@ class RentalsUnited {
     }   
 
     /**
-    * Get property blocks
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get property blocks
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyBlocks($pid, $dateFrom, $dateTo){
         $post[] = "<Pull_ListPropertyBlocks_RQ>
                 <Authentication>
@@ -190,12 +181,11 @@ class RentalsUnited {
     }      
 
     /**
-    * Get property reviews
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get property reviews
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyReviews($pid){
         $post[] = "<Pull_ListPropertyReviews_RQ>
                 <Authentication>
@@ -209,12 +199,11 @@ class RentalsUnited {
     }   
 
     /**
-    * Get property availablility
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get property availablility
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyAvailabilityCalendar($pid, $dateFrom, $dateTo){
         $post[] = "<Pull_ListPropertyAvailabilityCalendar_RQ>
                 <Authentication>
@@ -230,12 +219,11 @@ class RentalsUnited {
     }    
 
     /**
-    * Get property availablility
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get property availablility
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyMinStay($pid, $dateFrom, $dateTo){
         $post[] = "<Pull_ListPropertyMinStay_RQ>
                 <Authentication>
@@ -251,12 +239,11 @@ class RentalsUnited {
     }      
 
     /**
-    * Get property availablility
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get property availablility
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function GetPropertyAvbPrice($pid, $dateFrom, $dateTo){
         $post[] = "<Pull_GetPropertyAvbPrice_RQ>
                 <Authentication>
@@ -272,12 +259,11 @@ class RentalsUnited {
     }      
 
     /**
-    * Get property availablility
-    * 
-    * @param mixed $pid, property ID
-    * @return SimpleXMLElement
-    */
-
+     * Get property availablility
+     * 
+     * @param mixed $pid, property ID
+     * @return SimpleXMLElement
+     */
     function ListPropertyPrices($pid, $dateFrom, $dateTo, $pricingModelMode=0){
         $post[] = "<Pull_ListPropertyPrices_RQ>
                 <Authentication>
@@ -294,12 +280,12 @@ class RentalsUnited {
     }   
 
     /**
-    * Get reservations
-    * 
-    * @param string $dateFrom
-    * @param string $dateTo
-    * @return SimpleXMLElement
-    */
+     * Get reservations
+     * 
+     * @param string $dateFrom
+     * @param string $dateTo
+     * @return SimpleXMLElement
+     */
     function ListReservations($dateFrom, $dateTo){
       $dateFrom = $dateFrom ? $dateFrom : date('Y-m-d h:i:s');
       $dateTo = $dateTo ? $dateTo : date('Y-m-d h:i:s');

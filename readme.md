@@ -41,14 +41,57 @@ RENTALS_UNITED_PASSWORD=<your Rentals United password>
 XML_CACHE_DIR='/path/to/cache/directory/'
 ```
 ## Usage Examples
-- artisan **rentals_united:cache_all** // truncate all tables and cache everything
-- artisan **rentals_united:cache_dictionaries** // truncate all dictionary tables and cache dictionary data
-- artisan **rentals_united:cache_properties --id=4,5** // cache properties (ID) 4 & 5
-- artisan **rentals_united:cache_properties --id=new** // find and cache all new properties
-- artisan **rentals_united:update_change_log --since="-1 month"** // check for updates 'since' given date/time
-- artisan **rentals_united:update_properties --since="-1 month"** // update properties with changelog date 'since' given date/time
-- artisan **rentals_united:cache_reservations --since="-7 days"** // cache reservations in window 'since' given date/time to current time
+- artisan **rentals_united:cache_all** 
+   - Init RU data. Truncate all tables and cache everything.
 
+- artisan **rentals_united:cache_dictionaries** 
+  - Truncate all dictionary tables and cache dictionary data. 
+  - RU docs recommend running this "once a month".
+
+- artisan **rentals_united:cache_properties --id=4,5** 
+  - Cache specific properties on demand by id.
+
+- artisan **rentals_united:cache_properties --id=new** 
+  - Find and cache all properties created in the last 2 hours
+
+- artisan **rentals_united:update_change_log --since="-1 day"** 
+  - Update change logs older then 'since' given date/time.
+  - RU docs recommend running this "at least once a day".
+
+- artisan **rentals_united:update_properties --since="-1 day"** 
+  - Update properties data with local change log date 'since' given date/time.  
+  - RU docs recommend running this "at least once a day".
+
+- artisan **rentals_united:cache_reservations --since="-20 minute"** 
+  - Cache reservations with LastMod in window 'since' given date/time to current time. Does not truncate any existing reservations.
+  - RU does not allow a window larger then 7 days. 
+  - RU docs recommend running this "at least every 20 minutes".
+
+## Laravel Scheduler Example
+[Laravel task scheduling]([https://laravel.com/docs/5.5/scheduling](https://laravel.com/docs/5.5/scheduling))  makes it easy to update cached data.
+Example:
+```
+protected  function  schedule(Schedule  $schedule)
+{
+  $dayStr = date('Y-m-d');
+
+  $schedule->command('rentals_united:update_reservations --since="-21 minute"')
+    ->appendOutputTo(storage_path("logs/cron-{$dayStr}.log"))
+    ->cron('*/20 * * * * *');
+
+  $schedule->command('rentals_united:cache_dictionaries')
+    ->appendOutputTo(storage_path("logs/cron-{$dayStr}.log"))
+    ->monthlyOn(1, '00:00');
+  
+  $schedule->command('rentals_united:update_change_log')
+    ->appendOutputTo(storage_path("logs/cron-{$dayStr}.log"))
+    ->dailyAt('00:00');
+  
+  $schedule->command('rentals_united:update_properties --since="-25 hour"')
+    ->appendOutputTo(storage_path("logs/cron-{$dayStr}.log"))
+    ->dailyAt('00:00');
+}
+```
 
 ## License
 

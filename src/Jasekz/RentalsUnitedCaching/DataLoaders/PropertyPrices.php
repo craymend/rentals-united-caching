@@ -239,6 +239,12 @@ class PropertyPrices extends Base {
             if ((string) $obj->Status != 'Success') {
                 throw new Exception('Error downloading xml file.');
             }
+
+            echo "FileName (downloadXML): {$fileName}\r\n";
+
+            if($obj->ResponseID){
+                echo "ResponseID: {$obj->ResponseID}\r\n";
+            }
             
             $h = fopen($this->getCacheDir() . $fileName, 'w');
             fwrite($h, $xml['messages']);
