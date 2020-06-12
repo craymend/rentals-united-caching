@@ -68,7 +68,7 @@ XML_CACHE_DIR='/path/to/cache/directory/'
   - RU docs recommend running this "at least every 20 minutes".
 
 ## Laravel Scheduler Example
-[Laravel task scheduling]([https://laravel.com/docs/5.5/scheduling](https://laravel.com/docs/5.5/scheduling))  makes it easy to update cached data.
+[Laravel task scheduling](https://laravel.com/docs/5.5/scheduling) makes it easy to update cached data.
 Example:
 ```
 protected  function  schedule(Schedule  $schedule)
