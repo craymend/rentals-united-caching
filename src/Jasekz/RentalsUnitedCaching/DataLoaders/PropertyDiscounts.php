@@ -61,7 +61,7 @@ class PropertyDiscounts extends Base {
                     (string) $record->attributes()->Bigger,
                     (string) $record->attributes()->Smaller,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             
@@ -83,7 +83,7 @@ class PropertyDiscounts extends Base {
                     (string) $record->attributes()->DaysToArrivalFrom,
                     (string) $record->attributes()->DaysToArrivalTo,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

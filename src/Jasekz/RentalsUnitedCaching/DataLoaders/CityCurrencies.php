@@ -42,7 +42,7 @@ class CityCurrencies extends Base  {
                             created_at=?;";
                 DB::insert($sql, array(
                     (string) $record->attributes()->CurrencyCode,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));  
                 $currencyId = DB::connection()->getPdo()->lastInsertId();
                 
@@ -55,7 +55,7 @@ class CityCurrencies extends Base  {
                     DB::statement($sql, array(
                         (string) $location,
                         $currencyId,
-                        date('Y-m-d G:i:s')
+                        date('Y-m-d H:i:s')
                     ));
                 }
             }

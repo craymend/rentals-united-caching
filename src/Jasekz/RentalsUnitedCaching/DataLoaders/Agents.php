@@ -61,7 +61,7 @@ class Agents extends Base  {
                     (string) $record->SurName,
                     (string) $record->Email,
                     (string) $record->Telephone,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
 
                 $sql = "insert into 
@@ -72,7 +72,7 @@ class Agents extends Base  {
                 DB::statement($sql, array(
                     (string) $record->AgentID,
                     (string) $this->getFileContents($this->fileName)->Owner->attributes()->OwnerID,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

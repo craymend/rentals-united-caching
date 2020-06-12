@@ -65,7 +65,7 @@ class PropertyAVBPrice extends Base {
                     (string) $record->attributes()->ExtraPersonPrice,
                     (string) $record->attributes()->Deposit,
                     (string) $record->attributes()->SecurityDeposit,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

@@ -56,7 +56,7 @@ class Owners extends Base {
                     (string) $record->SurName,
                     (string) $record->Email,
                     (string) $record->Phone,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

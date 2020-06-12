@@ -50,7 +50,7 @@ class DepositTypes extends Base  {
                 DB::statement($sql, array(
                     (string) $record->attributes()->DepositTypeID,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

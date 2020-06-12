@@ -62,7 +62,7 @@ class OwnerProperties extends Base {
                     (string) $record->DateCreated,
                     (string) $record->IMAP ? $record->IMAP : null,
                     (string) $record->IMU,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

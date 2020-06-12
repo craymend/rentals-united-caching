@@ -42,14 +42,12 @@ XML_CACHE_DIR='/path/to/cache/directory/'
 ```
 ## Usage Examples
 - artisan **rentals_united:cache_all** // truncate all tables and cache everything
-- artisan **rentals_united:cache_properties --id=4** // cache property (ID) 4
+- artisan **rentals_united:cache_dictionaries** // truncate all dictionary tables and cache dictionary data
 - artisan **rentals_united:cache_properties --id=4,5** // cache properties (ID) 4 & 5
 - artisan **rentals_united:cache_properties --id=new** // find and cache all new properties
 - artisan **rentals_united:update_change_log --since="-1 month"** // check for updates 'since' given date/time
-- artisan **rentals_united:update_change_log --since="2014-03-26 12:51:00"** // check for updates 'since' given date/time
-- artisan **rentals_united:update_properties --since="-1 month"** // update properties which changed 'since' given date/time
-- artisan **rentals_united:update_properties --since="2014-03-26 12:51:00"** // update properties which changed 'since' given date/time
-- artisan **rentals_united:update_reservations --since="-7 days"** // update reservations which changed 'since' given date/time
+- artisan **rentals_united:update_properties --since="-1 month"** // update properties changelog 'since' given date/time
+- artisan **rentals_united:cache_reservations --since="-7 days"** // cache reservations 'since' given date/time
 
 
 ## License

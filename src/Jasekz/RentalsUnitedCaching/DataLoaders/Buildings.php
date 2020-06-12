@@ -50,7 +50,7 @@ class Buildings extends Base {
                 DB::statement($sql, array(
                     (string) $record->attributes()->BuildingID,
                     (string) $record->attributes()->BuildingName,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
                 
                 DB::statement("truncate BuildingProperties where BuildingsID=?", array((string) $record->attributes()->BuildingID));
@@ -65,7 +65,7 @@ class Buildings extends Base {
                     DB::statement($sql, array(
                         (string) $prop,
                         (string) $record->attributes()->BuildingID,
-                        date('Y-m-d G:i:s')
+                        date('Y-m-d H:i:s')
                     ));
                 }
             }

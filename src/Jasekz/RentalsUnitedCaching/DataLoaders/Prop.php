@@ -116,7 +116,7 @@ class Prop extends Base {
                     (string) $room->attributes()->CompositionRoomID,
                     (string) $amenity,
                     (string) $amenity->attributes()->Count,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
         }
@@ -143,7 +143,7 @@ class Prop extends Base {
                 (string) $description->attributes()->LanguageID,
                 (string) $description->Text,
                 (string) $description->Image,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -167,7 +167,7 @@ class Prop extends Base {
                 (string) $this->property->ID,
                 (string) $method->attributes()->PaymentMethodID,
                 (string) $method,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -193,7 +193,7 @@ class Prop extends Base {
             (string) $this->property->ArrivalInstructions->Email,
             (string) $this->property->ArrivalInstructions->Phone,
             (string) $this->property->ArrivalInstructions->DaysBeforeArrival,
-            date('Y-m-d G:i:s')
+            date('Y-m-d H:i:s')
         ));
         
         // HowToArrive
@@ -212,7 +212,7 @@ class Prop extends Base {
                 (string) $this->property->ID,
                 (string) $arrivalText->attributes()->LanguageID,
                 (string) $arrivalText,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
         
@@ -232,7 +232,7 @@ class Prop extends Base {
                 (string) $this->property->ID,
                 (string) $pickupServiceText->attributes()->LanguageID,
                 (string) $pickupServiceText,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -256,7 +256,7 @@ class Prop extends Base {
                 (string) $this->property->ID,
                 (string) $image->attributes()->ImageTypeID,
                 (string) $image,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -281,7 +281,7 @@ class Prop extends Base {
                 (string) $fee->attributes()->From,
                 (string) $fee->attributes()->To,
                 (string) $fee,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -306,7 +306,7 @@ class Prop extends Base {
                 (string) $fee->attributes()->From,
                 (string) $fee->attributes()->To,
                 (string) $fee,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -332,7 +332,7 @@ class Prop extends Base {
                 (string) $policy->attributes()->ValidFrom,
                 (string) $policy->attributes()->ValidTo,
                 (string) $policy,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -356,7 +356,7 @@ class Prop extends Base {
                 (string) $this->property->ID,
                 (string) $amenity,
                 (string) $amenity->attributes()->Count,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -402,7 +402,7 @@ class Prop extends Base {
                     (string) $this->property->ID,
                     $roomId,
                     $room['count'],
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
         }
@@ -459,7 +459,7 @@ class Prop extends Base {
             (string) $licenceInfo->FrenchTypeOfResidence ? $licenceInfo->FrenchTypeOfResidence : null,
             (string) $licenceInfo->FrenchCityTaxCategory ? $licenceInfo->FrenchCityTaxCategory : null,
             (string) $licenceInfo->TasmanianLicenceInfoTypeOfResidence ? $licenceInfo->TasmanianLicenceInfoTypeOfResidence : null,
-            date('Y-m-d G:i:s')
+            date('Y-m-d H:i:s')
         ));
     }
 
@@ -483,7 +483,7 @@ class Prop extends Base {
                 (string) $distance->DestinationID,
                 (string) $distance->DistanceUnitID,
                 (string) $distance->DistanceValue,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -533,6 +533,9 @@ class Prop extends Base {
                         PreparationTimeBeforeArrival=?,
                         NumberOfStars=?,
                         created_at=?;";
+                        
+        $lastModNla = $this->property->LastMod->attributes()->NLA;
+        $lastModNla = ($lastModNla && $lastModNla !== 'false') ? 1 : 0; 
 
         DB::statement($sql, array(
             (string) $this->property->ID,
@@ -544,7 +547,7 @@ class Prop extends Base {
             (string) $this->property->DetailedLocationID,
             (string) $this->property->DetailedLocationID->attributes()->TypeID,
             (string) $this->property->LastMod,
-            (string) $this->property->LastMod->attributes()->NLA ? 1 : 0,
+            (string) $lastModNla,
             (string) $this->property->IMAP ? $this->property->IMAP : null,
             (string) $this->property->IsActive ? 1 : 0,
             (string) $this->property->IsArchived ? 1 : 0,
@@ -571,7 +574,7 @@ class Prop extends Base {
             (string) $this->property->Deposit->attributes()->DepositTypeID,
             (string) $this->property->PreparationTimeBeforeArrival ? $this->property->PreparationTimeBeforeArrival : null,
             (string) $this->property->NumberOfStars ? $this->property->NumberOfStars : null,
-            date('Y-m-d G:i:s')
+            date('Y-m-d H:i:s')
         ));
     }
 

@@ -50,7 +50,7 @@ class CompositionRooms extends Base {
                 DB::statement($sql, array(
                     (string) $record->attributes()->CompositionRoomID,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

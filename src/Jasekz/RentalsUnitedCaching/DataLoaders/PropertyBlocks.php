@@ -57,7 +57,7 @@ class PropertyBlocks extends Base {
                     $propertyId,
                     (string) $record->DateFrom,
                     (string) $record->DateTo,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
                 
                 $this->deleteXML($fileName);
@@ -90,6 +90,9 @@ class PropertyBlocks extends Base {
             }
             
             echo "FileName (downloadXML): {$fileName}\r\n";
+            if($obj->ResponseID){
+                echo "ResponseID: {$obj->ResponseID}\r\n";
+            }
             
             $h = fopen($this->getCacheDir() . $fileName, 'w');
             fwrite($h, $xml['messages']);

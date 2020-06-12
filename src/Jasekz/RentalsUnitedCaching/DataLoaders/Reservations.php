@@ -1,8 +1,7 @@
 <?php
 namespace Jasekz\RentalsUnitedCaching\DataLoaders;
 
-use DB;
-use Exception;
+use DB, File, Exception;
 use Jasekz\RentalsUnitedCaching\Models\Reservation;
 
 class Reservations extends Base  {
@@ -118,7 +117,7 @@ class Reservations extends Base  {
                 (string) $this->reservation->PMSReservationId,
                 (string) $this->reservation->CancelTypeID ? $record->CancelTypeID : null,
                 (string) $this->reservation->IsArchived ? 1 : 0,
-                date('Y-m-d G:i:s'),
+                date('Y-m-d H:i:s'),
                 $curResv->ID
             ));
         }else{
@@ -176,7 +175,7 @@ class Reservations extends Base  {
                 (string) $this->reservation->PMSReservationId,
                 (string) $this->reservation->CancelTypeID ? $record->CancelTypeID : null,
                 (string) $this->reservation->IsArchived ? 1 : 0,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
     }
@@ -247,9 +246,48 @@ class Reservations extends Base  {
                 (string) $stayInfo->MappingRoomID,
                 (string) $stayInfo->MappingRateID,
                 (string) $stayInfo->Units,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
         }
+    }
 
+    /**
+     * Download and store XML file from RU
+     * Each service can override this function and provde the RU service that should be called, if needed
+     *
+     * @param string The file name
+     * @param $arg1 mixed argument to pass on to RU
+     * @throws Exception
+     * @return void
+     */
+    public function downloadXML($fileName, $dateFrom = null, $dateTo = null)
+    {
+        try {
+            $xml = $this->ru->{$this->ruFunction}($dateFrom, $dateTo);
+            
+            $obj = simplexml_load_string($xml['messages']);
+            
+            if ((string) $obj->Status != 'Success') {
+                throw new Exception('Error downloading xml file. "' . $obj . '"');
+            }
+
+            echo "FileName (downloadXML): {$fileName}\r\n";
+
+            if($obj->ResponseID){
+                echo "ResponseID: {$obj->ResponseID}\r\n";
+            }
+                
+            // create cache dir, if it doesn't exist
+            if (! File::exists($this->getCacheDir())) {
+                File::makeDirectory($this->getCacheDir());
+            }
+            
+            $h = fopen($this->getCacheDir() . $fileName, 'w');
+            fwrite($h, $xml['messages']);
+            fclose($h);
+        } 
+        catch (Exception $e) {
+            throw $e;
+        }
     }
 }

@@ -7,21 +7,21 @@ use Symfony\Component\Console\Input\InputArgument;
 use RentalsUnited;
 
 
-class UpdateReservationsCommand extends Command {
+class CacheReservationsCommand extends Command {
 
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'rentals_united:update_reservations';
+    protected $name = 'rentals_united:cache_reservations';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Cache reservations. Ex: rentals_united:update_reservations --since="-1 day"';
+    protected $description = 'Cache reservations. Ex: rentals_united:cache_reservations --since="-1 day"';
 
     /**
      * Create a new command instance.
@@ -40,6 +40,8 @@ class UpdateReservationsCommand extends Command {
      */
     public function fire()
     {       
+        $this->info(date('Y-m-d H:i:s', time()));
+
         $datetime = null;
 
         /*
@@ -67,11 +69,14 @@ class UpdateReservationsCommand extends Command {
         }else{
             $dateFrom = date('Y-m-d H:i:s', strtotime('-1 day'));
         }
-
         $dateTo = date('Y-m-d H:i:s');
 
+        $this->info("\tCache reservations from {$dateFrom} to {$dateTo}:");
+
         // Update change logs for all properties
-        RentalsUnited::dataLoader()->updateReservations($dateFrom, $dateTo);
+        RentalsUnited::dataLoader()->cacheReservations($dateFrom, $dateTo);
+
+        $this->info(""); // newline
     }
  
     /**

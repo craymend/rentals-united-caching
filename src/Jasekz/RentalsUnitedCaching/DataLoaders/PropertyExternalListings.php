@@ -59,7 +59,7 @@ class PropertyExternalListings extends Base {
                         (string) $listing->Url,
                         (string) $listing->Status,
                         (string) $listing->Description,
-                        date('Y-m-d G:i:s')
+                        date('Y-m-d H:i:s')
                     ));
                 }
                 
@@ -75,7 +75,7 @@ class PropertyExternalListings extends Base {
                         $propertyID,
                         (string) $notif->Url,
                         (string) $notif->StatusID,
-                        date('Y-m-d G:i:s')
+                        date('Y-m-d H:i:s')
                     ));
                 }
             }

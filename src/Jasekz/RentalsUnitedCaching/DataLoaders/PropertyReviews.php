@@ -67,7 +67,7 @@ class PropertyReviews extends Base {
                     (string) $record->Rating,
                     (string) $record->ArrivalDate,
                     (string) $record->Submitted,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

@@ -52,7 +52,7 @@ class OtaPropTypes extends Base  {
                     (string) $record->attributes()->PropertyTypeID,
                     (string) $record->attributes()->OTACode,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

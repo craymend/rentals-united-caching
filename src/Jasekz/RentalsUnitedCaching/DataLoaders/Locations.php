@@ -54,7 +54,7 @@ class Locations extends Base  {
                     (string) $record->attributes()->LocationTypeID,
                     (string) $record->attributes()->ParentLocationID,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

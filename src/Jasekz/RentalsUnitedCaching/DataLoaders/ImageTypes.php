@@ -50,7 +50,7 @@ class ImageTypes extends Base  {
                 DB::statement($sql, array(
                     (string) $record->attributes()->ImageTypeID,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

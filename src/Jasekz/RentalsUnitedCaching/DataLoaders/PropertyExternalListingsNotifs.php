@@ -57,7 +57,7 @@ class PropertyExternalListingsNotifs extends Base {
                         $propertyID,
                         (string) $notif->Url,
                         (string) $notif->StatusID,
-                        date('Y-m-d G:i:s')
+                        date('Y-m-d H:i:s')
                     ));
                 }
             }

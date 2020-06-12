@@ -52,7 +52,7 @@ class Languages extends Base  {
                     (string) $record->attributes()->LanguageID,
                     (string) $record->attributes()->LanguageCode,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

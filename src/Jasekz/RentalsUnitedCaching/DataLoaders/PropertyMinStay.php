@@ -59,7 +59,7 @@ class PropertyMinStay extends Base {
                     (string) $record,
                     (string) $record->attributes()->DateFrom,
                     (string) $record->attributes()->DateTo,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

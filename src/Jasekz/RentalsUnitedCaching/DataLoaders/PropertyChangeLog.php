@@ -67,7 +67,7 @@ class PropertyChangeLog extends Base {
                 (string) $record->Availability,
                 (string) $record->Image,
                 (string) $record->Description,
-                date('Y-m-d G:i:s')
+                date('Y-m-d H:i:s')
             ));
             
             $this->deleteXML($fileName);

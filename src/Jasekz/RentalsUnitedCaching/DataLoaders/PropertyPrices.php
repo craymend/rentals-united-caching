@@ -69,7 +69,7 @@ class PropertyPrices extends Base {
                     (string) $record->attributes()->DateTo,
                     (string) $record->Price,
                     (string) $record->Extra,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
                 
                 $propertyPricesID = DB::connection()->getPdo()->lastInsertId();
@@ -89,7 +89,7 @@ class PropertyPrices extends Base {
                             $propertyPricesID,
                             (string) $los->attributes()->Nights,
                             (string) $los->Price,
-                            date('Y-m-d G:i:s')
+                            date('Y-m-d H:i:s')
                         ));
                 
                         $propertyPricesLOSID = DB::connection()->getPdo()->lastInsertId();
@@ -111,7 +111,7 @@ class PropertyPrices extends Base {
                                     $propertyPricesLOSID,
                                     (string) $los->attributes()->NrOfGuests,
                                     (string) $los->Price,
-                                    date('Y-m-d G:i:s')
+                                    date('Y-m-d H:i:s')
                                 ));
                             }
                         }
@@ -133,7 +133,7 @@ class PropertyPrices extends Base {
                             $propertyPricesID,
                             (string) $egp->attributes()->ExtraGuests,
                             (string) $egp->Price,
-                            date('Y-m-d G:i:s')
+                            date('Y-m-d H:i:s')
                         ));
                     }
                 }

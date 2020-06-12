@@ -38,18 +38,22 @@ class Base {
      * @throws Exception
      * @return void
      */
-    // public function downloadXML($fileName, $arg1 = null)
-    public function downloadXML($fileName, ...$args)
+    public function downloadXML($fileName, $arg1 = null)
     {
         try {
-            $xml = $this->ru->{$this->ruFunction}(...$args);
+            $xml = $this->ru->{$this->ruFunction}($arg1);
             
             $obj = simplexml_load_string($xml['messages']);
             
             if ((string) $obj->Status != 'Success') {
                 throw new Exception('Error downloading xml file. "' . $obj . '"');
             }
+
             echo "FileName (downloadXML): {$fileName}\r\n";
+
+            if($obj->ResponseID){
+                echo "ResponseID: {$obj->ResponseID}\r\n";
+            }
                 
                 // create cache dir, if it doesn't exist
             if (! File::exists($this->getCacheDir())) {
@@ -60,7 +64,6 @@ class Base {
             fwrite($h, $xml['messages']);
             fclose($h);
         } 
-
         catch (Exception $e) {
             throw $e;
         }
@@ -114,31 +117,7 @@ class Base {
         $currentDB = DB::connection()->getDatabaseName();
         
         // dictionary data
-        RentalsUnited::dataLoader('statuses')->cacheInDb();
-        RentalsUnited::dataLoader('otaPropTypes')->cacheInDb();
-        RentalsUnited::dataLoader('amenities')->cacheInDb();
-        RentalsUnited::dataLoader('propTypes')->cacheInDb();
-        RentalsUnited::dataLoader('locationTypes')->cacheInDb();
-        RentalsUnited::dataLoader('locations')->cacheInDb();
-        RentalsUnited::dataLoader('cities')->cacheInDb();
-        RentalsUnited::dataLoader('cityCurrencies')->cacheInDb();
-        RentalsUnited::dataLoader('destinations')->cacheInDb();
-        RentalsUnited::dataLoader('distanceUnits')->cacheInDb();
-        RentalsUnited::dataLoader('compositionRooms')->cacheInDb();
-        RentalsUnited::dataLoader('roomAmenities')->cacheInDb();
-        RentalsUnited::dataLoader('imageTypes')->cacheInDb();
-        RentalsUnited::dataLoader('paymentMethods')->cacheInDb();
-        RentalsUnited::dataLoader('reservationStatuses')->cacheInDb();
-        RentalsUnited::dataLoader('depositTypes')->cacheInDb();
-        RentalsUnited::dataLoader('depositTypes')->cacheInDb();
-        RentalsUnited::dataLoader('languages')->cacheInDb();
-        RentalsUnited::dataLoader('propExternalStatuses')->cacheInDb();
-        RentalsUnited::dataLoader('changeoverTypes')->cacheInDb();
-        RentalsUnited::dataLoader('additionalFeeTypes')->cacheInDb();
-        RentalsUnited::dataLoader('additionalFeeDiscriminators')->cacheInDb();
-        RentalsUnited::dataLoader('additionalFeeKinds')->cacheInDb();
-        RentalsUnited::dataLoader('cancellationTypes')->cacheInDb();
-        RentalsUnited::dataLoader('quoteModes')->cacheInDb();
+        $this->cacheDictionaries();
         
         echo "Dictionary data cached\r\n";
         
@@ -190,6 +169,43 @@ class Base {
         RentalsUnited::dataLoader('reservations')->cacheInDb();
         
         echo "Finished.  Total properties cached: {$count}\r\n";
+    }
+
+    /**
+     * Cache all Rentals United dictionary data
+     * 
+     * Per RU docs: 
+     *   "Dictionary values should be pulled and updated in your local cache once a 
+     *    month and every time you receive an email notification from us that 
+     *    dictionary values have changed."
+     *
+     * @return void
+     */
+    public function cacheDictionaries(){
+        RentalsUnited::dataLoader('statuses')->cacheInDb();
+        RentalsUnited::dataLoader('propTypes')->cacheInDb();
+        RentalsUnited::dataLoader('otaPropTypes')->cacheInDb();
+        RentalsUnited::dataLoader('locationTypes')->cacheInDb();
+        RentalsUnited::dataLoader('locations')->cacheInDb();
+        RentalsUnited::dataLoader('cities')->cacheInDb();
+        RentalsUnited::dataLoader('cityCurrencies')->cacheInDb();
+        RentalsUnited::dataLoader('destinations')->cacheInDb();
+        RentalsUnited::dataLoader('distanceUnits')->cacheInDb();
+        RentalsUnited::dataLoader('compositionRooms')->cacheInDb();
+        RentalsUnited::dataLoader('amenities')->cacheInDb();
+        RentalsUnited::dataLoader('roomAmenities')->cacheInDb();
+        RentalsUnited::dataLoader('imageTypes')->cacheInDb();
+        RentalsUnited::dataLoader('paymentMethods')->cacheInDb();
+        RentalsUnited::dataLoader('reservationStatuses')->cacheInDb();
+        RentalsUnited::dataLoader('depositTypes')->cacheInDb();
+        RentalsUnited::dataLoader('languages')->cacheInDb();
+        RentalsUnited::dataLoader('propExternalStatuses')->cacheInDb();
+        RentalsUnited::dataLoader('changeoverTypes')->cacheInDb();
+        RentalsUnited::dataLoader('additionalFeeKinds')->cacheInDb();
+        RentalsUnited::dataLoader('additionalFeeDiscriminators')->cacheInDb();
+        RentalsUnited::dataLoader('additionalFeeTypes')->cacheInDb();
+        RentalsUnited::dataLoader('cancellationTypes')->cacheInDb();
+        RentalsUnited::dataLoader('quoteModes')->cacheInDb();
     }
 
     /**
@@ -251,7 +267,6 @@ class Base {
             RentalsUnited::dataLoader('propertyAvailabilityCalendar')->cacheInDb($propertyID);
             RentalsUnited::dataLoader('propertyMinStay')->cacheInDb($propertyID);
         }
-
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
             throw $e;
@@ -259,7 +274,7 @@ class Base {
     }
 
     /**
-     * Cache property availability
+     * Cache reservations
      *
      * @param string $dateFrom
      * @param string $dateTo
@@ -284,13 +299,13 @@ class Base {
      */
     public function updateChangeLog($lastCached = null)
     {
-        $lastCached = $lastCached ? $lastCached : date('Y-m-d h:i:s');
+        $lastCached = $lastCached ? $lastCached : date('Y-m-d H:i:s');
         $cached = false;
         
         // update existing changelog entries
         $results = RentalsUnited::changeLog()->where('created_at', '<', $lastCached)->orderBy('PropID');
         if ($results->count() == 0) {
-            echo "No change log entries to update.\r\n";
+            echo "No change log entries since {$lastCached}.\r\n";
             return true;
         }
         
@@ -300,7 +315,6 @@ class Base {
                 RentalsUnited::dataLoader('propertyChangeLog')->cacheInDb($result->prop->ID);
                 $cached = true;
             } 
-
             catch (Exception $e) {
                 echo 'PropID: ' . $result->prop->ID . ' ' . $e->getMessage() . "\r\n";
                 continue;
@@ -330,7 +344,7 @@ class Base {
             }
         }
         
-        if (! $cached) {
+        if (!$cached) {
             echo "No change logs to update\r\n";
         }
     }
@@ -343,7 +357,7 @@ class Base {
      */
     public function updateProperties($lastCached = null)
     {
-        $lastCached = $lastCached ? $lastCached : date('Y-m-d G:i:s');
+        $lastCached = $lastCached ? $lastCached : date('Y-m-d H:i:s');
         $cached = false;
 
         // avb
@@ -357,7 +371,7 @@ class Base {
                 try {
                     echo "Caching property {$result->prop->ID} availability\r\n";
                     $this->cachePropAvb($result->prop->ID);
-                    $result->prop->created_at = date('Y-m-d G:i:s');
+                    $result->prop->created_at = date('Y-m-d H:i:s');
                     $result->prop->save();
                     $cached = true;
                 } 
@@ -381,7 +395,7 @@ class Base {
                 try {
                     echo "Caching property {$result->prop->ID} pricing\r\n";
                     $this->cachePropPricing($result->prop->ID);
-                    $result->prop->created_at = date('Y-m-d G:i:s');
+                    $result->prop->created_at = date('Y-m-d H:i:s');
                     $result->prop->save();
                     $cached = true;
                 } 
@@ -417,16 +431,5 @@ class Base {
         if (! $cached) {
             echo "No properties to update\r\n";
         }
-    }
-
-    /**
-     * Run reservation updates
-     *
-     * @param $lastCached - Check for changes since this date
-     * @return void
-     */
-    public function updateReservations($dateFrom=null, $dateTo=null)
-    {
-        $this->cacheReservations($dateFrom, $dateTo);
     }
 }

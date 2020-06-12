@@ -54,7 +54,7 @@ class UpdateChangeLogCommand extends Command {
          * When no option is passed, the default is -10 minutes
          */ 
         if($this->option('since')) {
-            $datetime = date('Y-m-d G:i:s', strtotime($this->option('since')));
+            $datetime = date('Y-m-d H:i:s', strtotime($this->option('since')));
         }
         
         // Update change logs for all properties

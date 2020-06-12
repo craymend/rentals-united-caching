@@ -51,6 +51,8 @@ class PropertyAvailabilityCalendar extends Base {
                         {$this->table} 
                         set PropID=?, 
                             Date=?,
+                            Units=?,
+                            Reservations=?,
                             IsBlocked=?,
                             MinStay=?,
                             Changeover=?,
@@ -58,10 +60,12 @@ class PropertyAvailabilityCalendar extends Base {
                 DB::insert($sql, array(
                     $propertyId,
                     (string) $record->attributes()->Date,
+                    (string) $record->attributes()->Units,
+                    (string) $record->attributes()->Reservations,
                     (string) $record->IsBlocked == 'true' ? 1 : 0,
                     (string) $record->MinStay,
                     (string) $record->Changeover,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
                 
                 $this->deleteXML($fileName);

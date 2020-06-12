@@ -84,7 +84,7 @@ class PropertyBasePrice extends Base {
                     (string) $i, 
                     (string) $lowestPrice ? $lowestPrice : 0,
                     (string) $lowestPriceExtra ? $lowestPrice : 0,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             
@@ -164,7 +164,7 @@ class PropertyBasePrice extends Base {
                     (string) $record->attributes()->DayOfWeek,
                     (string) $record->attributes()->Price,
                     (string) $record->attributes()->Extra,                    
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             

@@ -52,7 +52,7 @@ class RoomAmenities extends Base  {
                     DB::statement($sql, array(
                         (string) $amenity->attributes()->AmenityID,
                         (string) $record->attributes()->CompositionRoomID,
-                        date('Y-m-d G:i:s')
+                        date('Y-m-d H:i:s')
                     ));
                 }
             }

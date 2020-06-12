@@ -50,7 +50,7 @@ class Destinations extends Base  {
                 DB::statement($sql, array(
                     (string) $record->attributes()->DestinationID,
                     (string) $record,
-                    date('Y-m-d G:i:s')
+                    date('Y-m-d H:i:s')
                 ));
             }
             
