@@ -771,7 +771,7 @@ class CreateRentalsUnitedTables extends Migration {
     private function downDictionaryTables()
     {
         Schema::drop('RentalsUnited_Statuses');
-        Schema::drop('RentalsUnited_OTAPropTypes');
+        Schema::drop('RentalsUnited_OtaPropTypes');
         Schema::drop('RentalsUnited_PropTypes');
         Schema::drop('RentalsUnited_LocationTypes');
         Schema::drop('RentalsUnited_Locations');
