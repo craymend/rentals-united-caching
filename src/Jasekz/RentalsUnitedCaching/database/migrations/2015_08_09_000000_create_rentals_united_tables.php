@@ -594,7 +594,7 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('PropertyType');
             $table->timestamps();
         });
-        Schema::create('RentalsUnited_OTAPropTypes', function (Blueprint $table)
+        Schema::create('RentalsUnited_OtaPropTypes', function (Blueprint $table)
         {
             $table->primary('PropertyTypeID');
             $table->integer('PropertyTypeID');
