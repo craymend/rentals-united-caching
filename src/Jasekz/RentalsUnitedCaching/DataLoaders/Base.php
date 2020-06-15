@@ -206,6 +206,7 @@ class Base {
         RentalsUnited::dataLoader('additionalFeeTypes')->cacheInDb();
         RentalsUnited::dataLoader('cancellationTypes')->cacheInDb();
         RentalsUnited::dataLoader('quoteModes')->cacheInDb();
+        RentalsUnited::dataLoader('liveNotificationMechanismChangeTypes')->cacheInDb();
     }
 
     /**

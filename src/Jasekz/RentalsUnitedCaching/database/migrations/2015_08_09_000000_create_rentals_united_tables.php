@@ -579,8 +579,7 @@ class CreateRentalsUnitedTables extends Migration {
     }
 
     private function upDictionaryTables()
-    {
-        
+    {        
         Schema::create('RentalsUnited_Statuses', function (Blueprint $table)
         {
             $table->primary('ID');
@@ -725,38 +724,46 @@ class CreateRentalsUnitedTables extends Migration {
             $table->timestamps();
         });
         Schema::create('RentalsUnited_AdditionalFeeKinds', function (Blueprint $table)
-        {            
+        {
             $table->primary('ID');
             $table->integer('ID');
             $table->string('AdditionalFeeKindInfo');
             $table->timestamps();
         });
         Schema::create('RentalsUnited_AdditionalFeeDiscriminators', function (Blueprint $table)
-        {            
+        {
             $table->primary('ID');
             $table->integer('ID');
             $table->string('AdditionalFeeDiscriminatorInfo');
             $table->timestamps();
         });
         Schema::create('RentalsUnited_AdditionalFeeTypes', function (Blueprint $table)
-        {            
+        {
             $table->primary('ID');
             $table->integer('ID');
             $table->string('AdditionalFeeTypeInfo');
             $table->timestamps();
         });
         Schema::create('RentalsUnited_CancellationTypes', function (Blueprint $table)
-        {            
+        {
             $table->primary('Id');
             $table->integer('Id');
             $table->string('CancellationType');
             $table->timestamps();
         });
         Schema::create('RentalsUnited_QuoteModes', function (Blueprint $table)
-        {            
+        {
             $table->primary('Id');
             $table->integer('Id');
             $table->string('QuoteMode');
+            $table->timestamps();
+        });
+        Schema::create('RentalsUnited_LiveNotificationMechanismChangeTypes', function (Blueprint $table)
+        {
+            $table->increments('Id');
+            $table->string('ChangeTypeID');
+            $table->string('Description', 2000);
+            $table->string('ExampleUrl', 2000);
             $table->timestamps();
         });
     }
@@ -788,5 +795,6 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::drop('RentalsUnited_AdditionalFeeTypes');
         Schema::drop('RentalsUnited_CancellationTypes');
         Schema::drop('RentalsUnited_QuoteModes');
+        Schema::drop('RentalsUnited_LiveNotificationMechanismChangeTypes');
     }
 }

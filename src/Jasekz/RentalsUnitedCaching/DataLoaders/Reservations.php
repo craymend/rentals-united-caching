@@ -180,6 +180,12 @@ class Reservations extends Base  {
         }
     }
 
+    public function cacheProvidedReservation(\SimpleXMLElement $reservation){
+        $this->reservation = $reservation;
+
+        return $this->cacheReservation();
+    }
+
     private function cacheStayInfos(){
         $reservation = $this->reservation;
 

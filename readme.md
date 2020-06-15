@@ -69,6 +69,7 @@ XML_CACHE_DIR='/path/to/cache/directory/'
 
 ## Laravel Scheduler Example
 [Laravel task scheduling](https://laravel.com/docs/5.5/scheduling) makes it easy to update cached data.
+
 Example:
 ```
 protected  function  schedule(Schedule  $schedule)
