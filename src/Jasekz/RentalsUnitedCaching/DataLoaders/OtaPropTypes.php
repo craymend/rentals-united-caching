@@ -18,14 +18,14 @@ class OtaPropTypes extends Base  {
      *
      * @var string
      */
-    protected $table = 'RentalsUnited_OtaPropTypes';
+    protected $table = 'RentalsUnited_OTAPropTypes';
 
     /**
      * Cached file name
      *
      * @var string
      */
-    protected $fileName = 'OtaPropTypes.xml';
+    protected $fileName = 'OTAPropTypes.xml';
 
     /**
      * Cache RU data to DB

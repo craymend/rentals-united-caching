@@ -594,7 +594,7 @@ class CreateRentalsUnitedTables extends Migration {
             $table->string('PropertyType');
             $table->timestamps();
         });
-        Schema::create('RentalsUnited_OtaPropTypes', function (Blueprint $table)
+        Schema::create('RentalsUnited_OTAPropTypes', function (Blueprint $table)
         {
             $table->primary('PropertyTypeID');
             $table->integer('PropertyTypeID');
@@ -771,7 +771,7 @@ class CreateRentalsUnitedTables extends Migration {
     private function downDictionaryTables()
     {
         Schema::drop('RentalsUnited_Statuses');
-        Schema::drop('RentalsUnited_OtaPropTypes');
+        Schema::drop('RentalsUnited_OTAPropTypes');
         Schema::drop('RentalsUnited_PropTypes');
         Schema::drop('RentalsUnited_LocationTypes');
         Schema::drop('RentalsUnited_Locations');
