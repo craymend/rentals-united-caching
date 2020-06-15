@@ -43,7 +43,11 @@ class UpdatePropertiesCommand extends Command {
         $datetime = null;        
         
         /*
-         * Option to check for updates 'since' given date/time
+         * Option to check for updates 'since' given date/time.
+         * Local RentalsUnited_PropertyChangeLog records are checked, not RU API.
+         * Because of this you may want to update the local changelog before using 
+         * this command.
+         * 
          * Argument passed in can be an valid php strtotime arg - http://php.net/manual/en/function.strtotime.php
          * 
          * Examples:
@@ -60,7 +64,7 @@ class UpdatePropertiesCommand extends Command {
 
         $this->info(date('Y-m-d H:i:s', time()));
         $this->info("\tUpdate RU property data using changelog since {$datetime}");
-          
+
         // Update change logs for all properties
         RentalsUnited::dataLoader()->updateProperties( $datetime );
 

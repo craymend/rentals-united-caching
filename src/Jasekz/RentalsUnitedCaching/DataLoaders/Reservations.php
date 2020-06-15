@@ -148,7 +148,8 @@ class Reservations extends Base  {
                     PMSReservationId=?,
                     CancelTypeID=?,
                     IsArchived=?,
-                    created_at=?;";
+                    created_at=?,
+                    updated_at=?;";
 
             DB::statement($sql, array(
                 (string) $this->reservation->ReservationID,
@@ -175,6 +176,7 @@ class Reservations extends Base  {
                 (string) $this->reservation->PMSReservationId,
                 (string) $this->reservation->CancelTypeID ? $record->CancelTypeID : null,
                 (string) $this->reservation->IsArchived ? 1 : 0,
+                date('Y-m-d H:i:s'),
                 date('Y-m-d H:i:s')
             ));
         }

@@ -133,7 +133,6 @@ class Base {
                 try {
                     RentalsUnited::dataLoader('ownerProperties')->cacheInDb($owner->OwnerID);
                 } 
-
                 catch (Exception $e) {
                     echo $e->getMessage() . "\r\n";
                 }
@@ -365,9 +364,7 @@ class Base {
         if ($results->count() == 0) {
             echo "No availability to update for any properties.\r\n";
         } else {
-        
             foreach ($results->get() as $result) {
-
                 try {
                     echo "Caching property {$result->prop->ID} availability\r\n";
                     $this->cachePropAvb($result->prop->ID);
@@ -375,7 +372,6 @@ class Base {
                     $result->prop->save();
                     $cached = true;
                 } 
-    
                 catch (Exception $e) {
                     echo 'Can not update property avb ID: ' . $result->prop->ID . ' ' . $e->getMessage() . "\r\n";
                     continue;
@@ -389,9 +385,7 @@ class Base {
         if ($results->count() == 0) {
             echo "No pricing to update for any properties.\r\n";
         } else {
-        
             foreach ($results->get() as $result) {
-                
                 try {
                     echo "Caching property {$result->prop->ID} pricing\r\n";
                     $this->cachePropPricing($result->prop->ID);
@@ -399,7 +393,6 @@ class Base {
                     $result->prop->save();
                     $cached = true;
                 } 
-    
                 catch (Exception $e) {
                     echo 'Can not update property pricing ID: ' . $result->prop->ID . ' ' . $e->getMessage() . "\r\n";
                     continue;
@@ -412,15 +405,12 @@ class Base {
         if ($results->count() == 0) {
             echo "No static data to update for any properties.\r\n";
         } else {
-        
             foreach ($results->get() as $result) {
-                
                 try {
                     echo "Caching property {$result->prop->ID} static data\r\n";
                     $this->cacheProp($result->prop->ID);
                     $cached = true;
-                } 
-    
+                }
                 catch (Exception $e) {
                     echo 'Can not update property static data ID: ' . $result->prop->ID . ' ' . $e->getMessage() . "\r\n";
                     continue;

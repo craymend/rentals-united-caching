@@ -41,7 +41,7 @@ class CacheAllCommand extends Command {
     public function fire()
     {
         $this->info(date('Y-m-d H:i:s', time()));
-        $this->info("\tCache all RU dats");
+        $this->info("\tCache all RU data");
 
         // Cache from RU
         RentalsUnited::dataLoader()->cacheAll();

@@ -35,7 +35,7 @@ class Prop extends Base {
         $fileName = 'NewProperties.xml';        
     
         try {
-            $xml = $this->ru->ListPropByCreationDate( $dateFrom, $dateTo);
+            $xml = $this->ru->ListPropByCreationDate($dateFrom, $dateTo);
             
             $obj = simplexml_load_string($xml['messages']);
             
@@ -45,11 +45,9 @@ class Prop extends Base {
             
             return $obj;
         } 
-
         catch (Exception $e) {
             throw $e;
         }
-        
     }
 
     /**
@@ -490,12 +488,98 @@ class Prop extends Base {
 
     private function cacheProperty()
     {
-        $sql = "delete from RentalsUnited_Prop where ID=?;";
-        DB::statement($sql, array(
-            (string) $this->property->ID
-        ));
-        
-        $sql = "insert into RentalsUnited_Prop
+        // check if property already exists
+        $curProp = DB::table($this->table)
+                    ->where('ID', $this->property->ID)
+                    ->first();
+
+        if($curProp){
+            $sql = "update 
+                    {$this->table}
+                set
+                    PUID=?,
+                    Name=?,
+                    BuildingID=?,
+                    BuildingName=?,
+                    OwnerID=?,
+                    DetailedLocationID=?,
+                    LocationTypeID=?,
+                    LastMod=?,
+                    LastModNLA=?,
+                    IMAP=?,
+                    IsActive=?,
+                    IsArchived=?,
+                    CleaningPrice=?,
+                    Space=?,
+                    StandardGuests=?,
+                    CanSleepMax=?,
+                    PropertyTypeID=?,
+                    ObjectTypeID=?,
+                    NoOfUnits=?,
+                    Floor=?,
+                    Street=?,
+                    ZipCode=?,
+                    Longitude=?,
+                    Latitude=?,
+                    DateCreated=?,
+                    SecurityDeposit=?,
+                    IMU=?,
+                    CheckInFrom=?,
+                    CheckInTo=?,
+                    CheckOutUntil=?,
+                    Place=?,
+                    Deposit=?,
+                    DepositTypeID=?,
+                    PreparationTimeBeforeArrival=?,
+                    NumberOfStars=?,
+                    updated_at=?
+                where
+                    ID=?";
+                        
+            $lastModNla = $this->property->LastMod->attributes()->NLA;
+            $lastModNla = ($lastModNla && $lastModNla !== 'false') ? 1 : 0; 
+
+            DB::statement($sql, array(
+                (string) $this->property->PUID,
+                (string) $this->property->Name,
+                (string) $this->property->ID->attributes()->BuildingID,
+                (string) $this->property->ID->attributes()->BuildingName,
+                (string) $this->property->OwnerID,
+                (string) $this->property->DetailedLocationID,
+                (string) $this->property->DetailedLocationID->attributes()->TypeID,
+                (string) $this->property->LastMod,
+                (string) $lastModNla,
+                (string) is_int($this->property->IMAP) ? $this->property->IMAP : null,
+                (string) $this->property->IsActive ? 1 : 0,
+                (string) $this->property->IsArchived ? 1 : 0,
+                (string) $this->property->CleaningPrice,
+                (string) $this->property->Space,
+                (string) $this->property->StandardGuests,
+                (string) $this->property->CanSleepMax,
+                (string) $this->property->PropertyTypeID,
+                (string) $this->property->ObjectTypeID,
+                (string) $this->property->NoOfUnits,
+                (string) $this->property->Floor,
+                (string) $this->property->Street,
+                (string) $this->property->ZipCode,
+                (string) $this->property->Coordinates->Longitude,
+                (string) $this->property->Coordinates->Latitude,
+                (string) $this->property->DateCreated,
+                (string) $this->property->SecurityDeposit,
+                (string) $this->property->IMU,
+                (string) $this->property->CheckInOut->CheckInFrom,
+                (string) $this->property->CheckInOut->CheckInTo,
+                (string) $this->property->CheckInOut->CheckOutUntil,
+                (string) $this->property->CheckInOut->Place,
+                (string) $this->property->Deposit,
+                (string) $this->property->Deposit->attributes()->DepositTypeID,
+                (string) $this->property->PreparationTimeBeforeArrival ? $this->property->PreparationTimeBeforeArrival : null,
+                (string) $this->property->NumberOfStars ? $this->property->NumberOfStars : null,
+                date('Y-m-d H:i:s'),
+                (string) $this->property->ID
+            ));
+        }else{
+            $sql = "insert into RentalsUnited_Prop
                     set ID=?,
                         PUID=?,
                         Name=?,
@@ -532,50 +616,53 @@ class Prop extends Base {
                         DepositTypeID=?,
                         PreparationTimeBeforeArrival=?,
                         NumberOfStars=?,
-                        created_at=?;";
+                        created_at=?,
+                        updated_at=?;";
                         
-        $lastModNla = $this->property->LastMod->attributes()->NLA;
-        $lastModNla = ($lastModNla && $lastModNla !== 'false') ? 1 : 0; 
+            $lastModNla = $this->property->LastMod->attributes()->NLA;
+            $lastModNla = ($lastModNla && $lastModNla !== 'false') ? 1 : 0; 
 
-        DB::statement($sql, array(
-            (string) $this->property->ID,
-            (string) $this->property->PUID,
-            (string) $this->property->Name,
-            (string) $this->property->ID->attributes()->BuildingID,
-            (string) $this->property->ID->attributes()->BuildingName,
-            (string) $this->property->OwnerID,
-            (string) $this->property->DetailedLocationID,
-            (string) $this->property->DetailedLocationID->attributes()->TypeID,
-            (string) $this->property->LastMod,
-            (string) $lastModNla,
-            (string) $this->property->IMAP ? $this->property->IMAP : null,
-            (string) $this->property->IsActive ? 1 : 0,
-            (string) $this->property->IsArchived ? 1 : 0,
-            (string) $this->property->CleaningPrice,
-            (string) $this->property->Space,
-            (string) $this->property->StandardGuests,
-            (string) $this->property->CanSleepMax,
-            (string) $this->property->PropertyTypeID,
-            (string) $this->property->ObjectTypeID,
-            (string) $this->property->NoOfUnits,
-            (string) $this->property->Floor,
-            (string) $this->property->Street,
-            (string) $this->property->ZipCode,
-            (string) $this->property->Coordinates->Longitude,
-            (string) $this->property->Coordinates->Latitude,
-            (string) $this->property->DateCreated,
-            (string) $this->property->SecurityDeposit,
-            (string) $this->property->IMU,
-            (string) $this->property->CheckInOut->CheckInFrom,
-            (string) $this->property->CheckInOut->CheckInTo,
-            (string) $this->property->CheckInOut->CheckOutUntil,
-            (string) $this->property->CheckInOut->Place,
-            (string) $this->property->Deposit,
-            (string) $this->property->Deposit->attributes()->DepositTypeID,
-            (string) $this->property->PreparationTimeBeforeArrival ? $this->property->PreparationTimeBeforeArrival : null,
-            (string) $this->property->NumberOfStars ? $this->property->NumberOfStars : null,
-            date('Y-m-d H:i:s')
-        ));
+            DB::statement($sql, array(
+                (string) $this->property->ID,
+                (string) $this->property->PUID,
+                (string) $this->property->Name,
+                (string) $this->property->ID->attributes()->BuildingID,
+                (string) $this->property->ID->attributes()->BuildingName,
+                (string) $this->property->OwnerID,
+                (string) $this->property->DetailedLocationID,
+                (string) $this->property->DetailedLocationID->attributes()->TypeID,
+                (string) $this->property->LastMod,
+                (string) $lastModNla,
+                (string) is_int($this->property->IMAP) ? $this->property->IMAP : null,
+                (string) $this->property->IsActive ? 1 : 0,
+                (string) $this->property->IsArchived ? 1 : 0,
+                (string) $this->property->CleaningPrice,
+                (string) $this->property->Space,
+                (string) $this->property->StandardGuests,
+                (string) $this->property->CanSleepMax,
+                (string) $this->property->PropertyTypeID,
+                (string) $this->property->ObjectTypeID,
+                (string) $this->property->NoOfUnits,
+                (string) $this->property->Floor,
+                (string) $this->property->Street,
+                (string) $this->property->ZipCode,
+                (string) $this->property->Coordinates->Longitude,
+                (string) $this->property->Coordinates->Latitude,
+                (string) $this->property->DateCreated,
+                (string) $this->property->SecurityDeposit,
+                (string) $this->property->IMU,
+                (string) $this->property->CheckInOut->CheckInFrom,
+                (string) $this->property->CheckInOut->CheckInTo,
+                (string) $this->property->CheckInOut->CheckOutUntil,
+                (string) $this->property->CheckInOut->Place,
+                (string) $this->property->Deposit,
+                (string) $this->property->Deposit->attributes()->DepositTypeID,
+                (string) $this->property->PreparationTimeBeforeArrival ? $this->property->PreparationTimeBeforeArrival : null,
+                (string) $this->property->NumberOfStars ? $this->property->NumberOfStars : null,
+                date('Y-m-d H:i:s'),
+                date('Y-m-d H:i:s')
+            ));
+        }
     }
 
     /**

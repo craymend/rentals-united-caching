@@ -6,8 +6,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use RentalsUnited;
 
-
-class CacheDictionaries extends Command {
+class CacheDictionariesCommand extends Command {
 
     /**
      * The console command name.

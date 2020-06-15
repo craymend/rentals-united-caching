@@ -4,7 +4,7 @@ namespace Jasekz\RentalsUnitedCaching;
 use Illuminate\Support\ServiceProvider;
 use Jasekz\RentalsUnitedCaching\RentalsUnitedCaching;
 use Jasekz\RentalsUnitedCaching\Commands\CacheAllCommand;
-use Jasekz\RentalsUnitedCaching\Commands\CacheDictionaries;
+use Jasekz\RentalsUnitedCaching\Commands\CacheDictionariesCommand;
 use Jasekz\RentalsUnitedCaching\Commands\CachePropertiesCommand;
 use Jasekz\RentalsUnitedCaching\Commands\UpdateChangeLogCommand;
 use Jasekz\RentalsUnitedCaching\Commands\UpdatePropertiesCommand;
@@ -51,7 +51,7 @@ class RentalsUnitedCachingServiceProvider extends ServiceProvider {
         });
 
         $this->app->singleton('command.ru.cache_dictionaries', function ($app) {
-            return new CacheDictionaries();
+            return new CacheDictionariesCommand();
         });
         
         $this->app->singleton('command.ru.cache_properties', function ($app) {

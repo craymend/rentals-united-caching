@@ -80,7 +80,7 @@ class CachePropertiesCommand extends Command {
                 die($e->getMessage());
             }
         }
-                
+
         if($ids) {
             foreach($ids as $id) {
                 RentalsUnited::dataLoader()->cacheProp($id);
