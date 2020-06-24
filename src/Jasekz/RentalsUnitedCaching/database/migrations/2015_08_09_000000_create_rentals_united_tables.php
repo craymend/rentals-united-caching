@@ -110,7 +110,6 @@ class CreateRentalsUnitedTables extends Migration {
         {            
             $table->increments('ID');
             $table->integer('PropID');
-            $table->integer('PropertyPricesID');
             $table->float('PropertyPrice');
             $table->integer('NOP');
             $table->float('Cleaning');
@@ -458,7 +457,7 @@ class CreateRentalsUnitedTables extends Migration {
             $table->increments('ID');
             $table->integer('PropID');
             $table->integer('LanguageID');
-            $table->string('Text');
+            $table->text('Text');
             $table->string('Image');
             $table->timestamps();
         });

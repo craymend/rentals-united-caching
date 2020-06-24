@@ -208,11 +208,11 @@ class Reservations extends Base  {
         
         foreach($reservation->StayInfos->StayInfo as $stayInfo){
             $ruPrice = (string) $stayInfo->Costs->RUPrice;
-            $ruPrice = number_format($ruPrice, 2);
+            $ruPrice = number_format($ruPrice, 2, '.', '');
             $clientPrice = (string) $stayInfo->Costs->ClientPrice;
-            $clientPrice = number_format($clientPrice, 2);
+            $clientPrice = number_format($clientPrice, 2, '.', '');
             $alreadyPaid = (string) $stayInfo->Costs->AlreadyPaid;
-            $alreadyPaid = number_format($alreadyPaid, 2);
+            $alreadyPaid = number_format($alreadyPaid, 2, '.', '');
 
             $sql = "insert into 
                         RentalsUnited_ReservationStayInfos

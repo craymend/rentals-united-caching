@@ -13,4 +13,8 @@ class Locations extends Base  {
     {
         return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\Prop', 'DetailedLocationID', 'LocationID');
     }
+
+    public function parentLocation(){
+        return $this->belongsTo('Jasekz\RentalsUnitedCaching\Models\Locations', 'ParentLocationID', 'LocationID');
+    }
 }
