@@ -26,7 +26,7 @@ class Reservations extends Base  {
      * @var string
      */
     protected $fileName = 'Reservations.xml';
-
+    
     /**
      * Cache RU data to DB
      *
@@ -47,6 +47,53 @@ class Reservations extends Base  {
                 $this->cacheReservation();
                 $this->cacheStayInfos();
             }
+            
+            $this->deleteXML($this->fileName);
+        } 
+        catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Cache RU data to DB
+     *
+     * @throws Exception
+     * @return void
+     */
+    public function cacheInDbById($id)
+    {
+        $fileName = 'GetReservationById.xml';        
+
+        try {
+            $xml = $this->ru->GetReservationById($id);
+
+            $obj = simplexml_load_string($xml['messages']);
+
+            if ((string) $obj->Status != 'Success') {
+                throw new Exception('Error downloading xml file. "' . $obj . '"');
+            }
+
+            echo "FileName (downloadXML): {$fileName}\r\n";
+
+            if($obj->ResponseID){
+                echo "ResponseID: {$obj->ResponseID}\r\n";
+            }
+
+            // create cache dir, if it doesn't exist
+            if (! File::exists($this->getCacheDir())) {
+                File::makeDirectory($this->getCacheDir());
+            }
+            
+            $h = fopen($this->getCacheDir() . $fileName, 'w');
+            fwrite($h, $xml['messages']);
+            fclose($h);
+
+            // store reservation in database
+            $record = $this->getFileContents($fileName)->Reservation;
+            $this->reservation = $record;
+            $this->cacheReservation();
+            $this->cacheStayInfos();
             
             $this->deleteXML($this->fileName);
         } 

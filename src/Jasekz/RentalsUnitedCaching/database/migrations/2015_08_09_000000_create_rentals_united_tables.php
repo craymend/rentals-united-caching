@@ -361,6 +361,21 @@ class CreateRentalsUnitedTables extends Migration {
             $table->integer('Count');
             $table->timestamps();
         });
+        Schema::create('RentalsUnited_PropAdditionalFees', function (Blueprint $table)
+        {            
+            $table->increments('ID');
+            $table->integer('PropID');
+            $table->decimal('Value', 10, 4)->nullable();
+            $table->integer('Order');
+            $table->integer('DiscriminatorID');
+            $table->integer('KindID');
+            $table->string('Name', 100)->nullable();
+            $table->tinyInteger('Optional');
+            $table->tinyInteger('Refundable')->nullable();
+            $table->integer('FeeTaxType');
+            $table->integer('CollectTime')->nullable();
+            $table->timestamps();
+        });
         Schema::create('RentalsUnited_PropImages', function (Blueprint $table)
         {            
             $table->increments('ID');
@@ -555,6 +570,7 @@ class CreateRentalsUnitedTables extends Migration {
         Schema::drop('RentalsUnited_PropCompositionRooms');
         Schema::drop('RentalsUnited_PropCompositionRoomAmenities');
         Schema::drop('RentalsUnited_PropAmenities');
+        Schema::drop('RentalsUnited_PropAdditionalFees');
         Schema::drop('RentalsUnited_PropImages');
         Schema::drop('RentalsUnited_PropArrivalInstructions');
         Schema::drop('RentalsUnited_PropLicenceInfo');

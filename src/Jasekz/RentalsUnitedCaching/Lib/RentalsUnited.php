@@ -278,6 +278,25 @@ class RentalsUnited {
   }   
 
   /**
+   * Get reservation by id
+   * 
+   * @param string $id
+   * @return SimpleXMLElement
+   */
+  function GetReservationById($id){
+    $post[] = "<Pull_GetReservationByID_RQ>
+                <Authentication>
+                  <UserName>".$this->username."</UserName>
+                  <Password>".$this->password."</Password>
+                </Authentication>
+                <ReservationID>" . $id . "</ReservationID>
+              </Pull_GetReservationByID_RQ>";
+
+    $x = $this->curlPushBack($this->server_url,$post);
+    return $x;
+  }
+
+  /**
    * Get reservations
    * 
    * @param string $dateFrom

@@ -291,6 +291,23 @@ class Base {
     }
 
     /**
+     * Cache reservations
+     *
+     * @param string $id
+     * @return void
+     */
+    public function cacheReservationById($id)
+    {
+        try {
+            RentalsUnited::dataLoader('reservations')->cacheInDbById($id);
+        }
+        catch (Exception $e) {
+            echo "Exception: {$e->getMessage()}\r\n";
+            throw $e;
+        }
+    }
+
+    /**
      * Cache property change log
      *
      * @param $lastCached - Check for changes since this date

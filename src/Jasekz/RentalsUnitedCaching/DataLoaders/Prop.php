@@ -77,6 +77,7 @@ class Prop extends Base {
             $this->cachePropertyPaymentMethods();
             $this->cachePropertyCancellationPolicies();
             $this->cachePropertyDescriptions();
+            $this->cachePropertyAdditionalFees();
             
             $this->deleteXML($fileName);
         } 
@@ -134,6 +135,7 @@ class Prop extends Base {
                         LanguageID=?,
                         Text=?,
                         Image=?,
+                        created_at=?,
                         updated_at=?;";
             
             DB::statement($sql, array(
@@ -141,6 +143,47 @@ class Prop extends Base {
                 (string) $description->attributes()->LanguageID,
                 (string) $description->Text,
                 (string) $description->Image,
+                date('Y-m-d H:i:s'),
+                date('Y-m-d H:i:s')
+            ));
+        }
+    }
+
+    private function cachePropertyAdditionalFees()
+    {
+        $sql = "delete from RentalsUnited_PropAdditionalFees where PropID=?;";
+        DB::statement($sql, array(
+            (string) $this->property->ID
+        ));
+        
+        foreach ($this->property->AdditionalFees->AdditionalFee as $additionalFee) {
+            
+            $sql = "insert into RentalsUnited_PropAdditionalFees
+                    set PropID=?,
+                        Value=?,
+                        `Order`=?,
+                        DiscriminatorID=?,
+                        KindID=?,
+                        Name=?,
+                        Optional=?,
+                        Refundable=?,
+                        FeeTaxType=?,
+                        CollectTime=?,
+                        created_at=?,
+                        updated_at=?;";
+            
+            DB::statement($sql, array(
+                (string) $this->property->ID,
+                (string) $additionalFee->Value,
+                (string) $additionalFee->attributes()->Order,
+                (string) $additionalFee->attributes()->DiscriminatorID,
+                (string) $additionalFee->attributes()->KindID,
+                (string) $additionalFee->attributes()->Name,
+                (string) $additionalFee->attributes()->Optional == 'true' ? 1 : 0,
+                (string) $additionalFee->attributes()->Refundable == 'true' ? 1 : 0,
+                (string) $additionalFee->attributes()->FeeTaxType,
+                (string) $additionalFee->attributes()->CollectTime,
+                date('Y-m-d H:i:s'),
                 date('Y-m-d H:i:s')
             ));
         }

@@ -67,6 +67,9 @@ XML_CACHE_DIR='/path/to/cache/directory/'
   - RU does not allow a window larger then 7 days. 
   - RU docs recommend running this "at least every 20 minutes".
 
+- artisan **rentals_united:cache_reservations --id=3,4** 
+  - Cache specific reservations on demand by id.
+
 ## Laravel Scheduler Example
 [Laravel task scheduling](https://laravel.com/docs/5.5/scheduling) makes it easy to update cached data.
 

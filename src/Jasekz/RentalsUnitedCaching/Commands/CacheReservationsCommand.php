@@ -14,7 +14,8 @@ class CacheReservationsCommand extends Command {
      *
      * @var string
      */
-    protected $name = 'rentals_united:cache_reservations';
+    // protected $name = 'rentals_united:cache_reservations';
+    protected $signature = 'rentals_united:cache_reservations {--since=} {--id=}';
 
     /**
      * The console command description.
@@ -41,6 +42,7 @@ class CacheReservationsCommand extends Command {
     public function fire()
     {       
         $this->info(date('Y-m-d H:i:s', time()));
+        $this->info("\tCache RU reservations");
 
         $datetime = null;
 
@@ -71,10 +73,20 @@ class CacheReservationsCommand extends Command {
         }
         $dateTo = date('Y-m-d H:i:s');
 
-        $this->info("\tCache reservations from {$dateFrom} to {$dateTo}:");
+        $ids = null;
+        if($this->option('id')) {
+            $ids = explode(',', $this->option('id'));
+        }
 
-        // Update change logs for all properties
-        RentalsUnited::dataLoader()->cacheReservations($dateFrom, $dateTo);
+        if($ids) {
+            foreach($ids as $id) {
+                RentalsUnited::dataLoader()->cacheReservationById($id);
+            }
+        }else{
+            // Update change logs for all properties
+            RentalsUnited::dataLoader()->cacheReservations($dateFrom, $dateTo);
+        }
+
 
         $this->info(""); // newline
     }

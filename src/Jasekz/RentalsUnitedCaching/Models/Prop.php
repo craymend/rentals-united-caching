@@ -143,4 +143,9 @@ class Prop extends Base  {
     {
         return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\SeasonPrices', 'PropID', 'ID');
     }
+
+    public function additionalFees()
+    {
+        return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\PropAdditionalFees', 'PropID', 'ID')->orderBy('Order', 'ASC');
+    }
 }
