@@ -320,6 +320,69 @@ class RentalsUnited {
     $x = $this->curlPushBack($this->server_url,$post);
     return $x;
   }
+
+  /**
+   * Make an online booking for a property, in case of success returns a reservation ID
+   * 
+   * @param mixed $pid, property ID
+   * @param mixed $from_date, From date (yyyy-mm-dd) 
+   * @param mixed $to_date, To date (yyyy-mm-dd)
+   * @param mixed $pax, Number of people
+   * @param mixed $ru_price, Price by Rentals United
+   * @param mixed $client_price, Price offered to client
+   * @param mixed $already_paid, Amount already paid
+   * @param mixed $name, Name of the client
+   * @param mixed $sur_name, Sur name of the client
+   * @param mixed $email, Email address of the client
+   * @param mixed $phone, Phone number of the client
+   * @param mixed $address, Address of the client
+   * @param mixed $zipcode, Zip code of the client (in case provided)
+   * @param mixed $skype_id, Skype id/name (in case provided)
+   * @param mixed $comments Additional comments String(4000) (in case provided)
+   * @return SimpleXMLElement, reservation ID
+   */
+  function PutConfirmedReservationMulti(
+      $pid, $from_date, $to_date, $num_guests,
+      $ru_price, $client_price, $already_paid,
+      $name, $sur_name,
+      $email, $phone, $address, $zipcode="",
+      $skype_id="", $comments=""
+    ){
+    $post[] = "<Push_PutConfirmedReservationMulti_RQ>
+          <Authentication>
+            <UserName>".$this->username."</UserName>
+            <Password>".$this->password."</Password>
+          </Authentication>
+          <Reservation>
+            <StayInfos>
+              <StayInfo>
+                <PropertyID>$pid</PropertyID>
+                <DateFrom>$from_date</DateFrom>
+                <DateTo>$to_date</DateTo>
+                <NumberOfGuests>$num_guests</NumberOfGuests>
+                <Costs>
+                  <RUPrice>$ru_price</RUPrice>
+                  <ClientPrice>$client_price</ClientPrice>
+                  <AlreadyPaid>$already_paid</AlreadyPaid>
+                </Costs>
+              </StayInfo>
+            </StayInfos>
+            <CustomerInfo>
+              <Name>$name</Name>
+              <SurName>$sur_name</SurName>
+              <Email>$email</Email>
+              <Phone>$phone</Phone>
+              <SkypeID>$skype_id</SkypeID>
+              <Address>$address</Address>
+              <ZipCode>$zipcode</ZipCode>
+            </CustomerInfo>
+            <Comments>$comments</Comments>
+          </Reservation>
+        </Push_PutConfirmedReservationMulti_RQ>";
+          
+    $x = $this->curlPushBack($this->server_url, $post);  
+    return $x;
+  }  
     
   /**
    * Default Curl connection
