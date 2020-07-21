@@ -140,8 +140,9 @@ class Reservations extends Base  {
                 where
                     id=?;";
 
+
             DB::statement($sql, array(
-                (string) $this->reservation->StatusID,
+                (string) $this->reservation->StatusID ? $this->reservation->StatusID : 0,
                 (string) $this->reservation->LastMod,
                 (string) $this->reservation->CustomerInfo->Name,
                 (string) $this->reservation->CustomerInfo->SurName,
@@ -200,7 +201,7 @@ class Reservations extends Base  {
 
             DB::statement($sql, array(
                 (string) $this->reservation->ReservationID,
-                (string) $this->reservation->StatusID,
+                (string) $this->reservation->StatusID ? $this->reservation->StatusID : 0,
                 (string) $this->reservation->LastMod,
                 (string) $this->reservation->CustomerInfo->Name,
                 (string) $this->reservation->CustomerInfo->SurName,
@@ -232,7 +233,9 @@ class Reservations extends Base  {
     public function cacheProvidedReservation(\SimpleXMLElement $reservation){
         $this->reservation = $reservation;
 
-        return $this->cacheReservation();
+        $this->cacheReservation();
+        $this->cacheStayInfos();
+        return;
     }
 
     private function cacheStayInfos(){
