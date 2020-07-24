@@ -140,9 +140,10 @@ class Reservations extends Base  {
                 where
                     id=?;";
 
+            $statusID = $this->reservation->StatusID ? $this->reservation->StatusID : 0;
 
             DB::statement($sql, array(
-                (string) $this->reservation->StatusID ? $this->reservation->StatusID : 0,
+                (string) $statusID,
                 (string) $this->reservation->LastMod,
                 (string) $this->reservation->CustomerInfo->Name,
                 (string) $this->reservation->CustomerInfo->SurName,

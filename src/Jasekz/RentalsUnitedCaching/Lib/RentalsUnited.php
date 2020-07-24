@@ -345,7 +345,7 @@ class RentalsUnited {
       $pid, $from_date, $to_date, $num_guests,
       $ru_price, $client_price, $already_paid,
       $name, $sur_name,
-      $email, $phone, $address, $zipcode="",
+      $email, $phone, $address, $zipcode="", $countryId="",
       $skype_id="", $comments=""
     ){
     $post[] = "<Push_PutConfirmedReservationMulti_RQ>
@@ -375,6 +375,7 @@ class RentalsUnited {
               <SkypeID>$skype_id</SkypeID>
               <Address>$address</Address>
               <ZipCode>$zipcode</ZipCode>
+              <CountryID>$countryId</CountryID>
             </CustomerInfo>
             <Comments>$comments</Comments>
           </Reservation>

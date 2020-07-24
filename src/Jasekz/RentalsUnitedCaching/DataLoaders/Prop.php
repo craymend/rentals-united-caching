@@ -127,6 +127,11 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->Descriptions ||
+           !$this->property->Descriptions->Description){
+            return;
+        }
         
         foreach ($this->property->Descriptions->Description as $description) {
             
@@ -155,8 +160,13 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->AdditionalFees ||
+           !$this->property->AdditionalFees->AdditionalFee){
+            return;
+        }
         
-        foreach ($this->property->AdditionalFees->AdditionalFee as $additionalFee) {
+        foreach($this->property->AdditionalFees->AdditionalFee as $additionalFee) {
             
             $sql = "insert into RentalsUnited_PropAdditionalFees
                     set PropID=?,
@@ -195,9 +205,13 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->PaymentMethods ||
+           !$this->property->PaymentMethods->PaymentMethod){
+
+        }
         
         foreach ($this->property->PaymentMethods->PaymentMethod as $method) {
-            
             $sql = "insert into RentalsUnited_PropPaymentMethods
                     set PropID=?,
                         PaymentMethodID=?,
@@ -242,6 +256,13 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if (!$this->property->ArrivalInstructions ||
+            !$this->property->ArrivalInstructions->HowToArrive ||
+            !$this->property->ArrivalInstructions->HowToArrive->Text) {
+                return;
+        }
+
         foreach ($this->property->ArrivalInstructions->HowToArrive->Text as $arrivalText) {
             $sql = "insert into RentalsUnited_PropHowToArriveText
                         set PropID=?,
@@ -262,6 +283,13 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->ArrivalInstructions ||
+           !$this->property->ArrivalInstructions->PickupService ||
+           !$this->property->ArrivalInstructions->PickupService->Text){
+            return;
+        }
+
         foreach ($this->property->ArrivalInstructions->PickupService->Text as $pickupServiceText) {
             $sql = "insert into RentalsUnited_PropPickupServiceText
                         set PropID=?,
@@ -284,9 +312,13 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->Images ||
+           !$this->property->Images->Image){
+            return;
+        }
         
         foreach ($this->property->Images->Image as $image) {
-            
             $sql = "insert into RentalsUnited_PropImages
                     set PropID=?,
                         ImageTypeID=?,
@@ -309,6 +341,12 @@ class Prop extends Base {
             (string) $this->property->ID
         ));
         
+        if(!$this->property->CheckInOut || 
+           !$this->property->CheckInOut->LateArrivalFees || 
+           !$this->property->CheckInOut->LateArrivalFees->LateArrivalFee){
+            return;
+        }
+
         foreach ($this->property->CheckInOut->LateArrivalFees->LateArrivalFee as $fee) {
             $sql = "insert into RentalsUnited_PropLateArrivalFees
                     set PropID=?,
@@ -333,6 +371,12 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->CheckInOut || 
+           !$this->property->CheckInOut->EarlyDepartureFees ||
+           !$this->property->CheckInOut->EarlyDepartureFees->EarlyDepartureFee){
+            return;
+        }
         
         foreach ($this->property->CheckInOut->EarlyDepartureFees->EarlyDepartureFee as $fee) {
             $sql = "insert into RentalsUnited_PropEarlyDepartureFees
@@ -358,6 +402,11 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->CancellationPolicies ||
+           !$this->property->CancellationPolicies->CancellationPolicy){
+            return;
+        }
         
         foreach ($this->property->CancellationPolicies->CancellationPolicy as $policy) {
             
@@ -385,6 +434,10 @@ class Prop extends Base {
             (string) $this->property->ID
         ));
         
+        if(!$this->property->Amenities || !$this->property->Amenities->Amenity){
+            return;
+        }
+
         foreach ($this->property->Amenities->Amenity as $amenity) {
             
             $sql = "insert into RentalsUnited_PropAmenities
@@ -482,21 +535,39 @@ class Prop extends Base {
                     TasmanianLicenceInfoTypeOfResidence=?,
                     created_at=?";
 
+        $isExempt = (string) $licenceInfo->IsExempt;
+        $isExempt = ($isExempt && $isExempt !== 'false') ? 1 : 0;
+
+        $isManagedByOwner = (string) $licenceInfo->IsManagedByOwner;
+        $isManagedByOwner = ($isManagedByOwner && $isManagedByOwner !== 'false') ? 1 : 0;
+
+        $vatRegistered = (string) $licenceInfo->IsVATRegistered;
+        $vatRegistered = ($vatRegistered && $vatRegistered !== 'false') ? 1 : 0;
+
+        $managedByPrivatePerson = (string) $licenceInfo->IsManagedByPrivatePerson;
+        $managedByPrivatePerson = ($managedByPrivatePerson && $managedByPrivatePerson !== 'false') ? 1 : 0;
+
+        $isRegisteredAtTradeCommercialRegister = (string) $licenceInfo->FrenchIsRegisteredAtTradeCommercialRegister;
+        $isRegisteredAtTradeCommercialRegister = ($isRegisteredAtTradeCommercialRegister && $isRegisteredAtTradeCommercialRegister !== 'false') ? 1 : 0;
+
+        $declaresRevenuesAsProfessionalForDirectTaxPurposes = (string) $licenceInfo->FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes;
+        $declaresRevenuesAsProfessionalForDirectTaxPurposes = ($declaresRevenuesAsProfessionalForDirectTaxPurposes && $declaresRevenuesAsProfessionalForDirectTaxPurposes !== 'false') ? 1 : 0;
+
         DB::statement($sql, array(
             (string) $this->property->ID,
             (string) $licenceInfo->LicenceNumber,
             (string) $licenceInfo->IssueDate ? $licenceInfo->IssueDate : null,
             (string) $licenceInfo->ExpirationDate ? $licenceInfo->ExpirationDate : null,
-            (string) $licenceInfo->IsExempt ? $licenceInfo->IsExempt : null,
-            (string) $licenceInfo->IsVATRegistered ? $licenceInfo->IsVATRegistered : null,
+            (string) $isExempt,
+            (string) $vatRegistered,
             (string) $licenceInfo->ExemptionReason ? $licenceInfo->ExemptionReason : null,
-            (string) $licenceInfo->IsManagedByOwner ? $licenceInfo->IsManagedByOwner : null,
-            (string) $licenceInfo->IsManagedByPrivatePerson ? $licenceInfo->IsManagedByPrivatePerson : null,
+            (string) $isManagedByOwner,
+            (string) $managedByPrivatePerson,
             (string) $licenceInfo->BrazilianCityHallInfoId ? $licenceInfo->BrazilianCityHallInfoId : null,
             (string) $licenceInfo->JapaneseLicenceInfo ? $licenceInfo->JapaneseLicenceInfo : null,
-            (string) $licenceInfo->FrenchIsRegisteredAtTradeCommercialRegister ? $licenceInfo->FrenchIsRegisteredAtTradeCommercialRegister : null,
+            (string) $isRegisteredAtTradeCommercialRegister,
             (string) $licenceInfo->FrenchPropertyTypeForTaxPurposes ? $licenceInfo->FrenchPropertyTypeForTaxPurposes : null,
-            (string) $licenceInfo->FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes ? $licenceInfo->FrenchDeclaresRevenuesAsProfessionalForDirectTaxPurposes : null,
+            (string) $declaresRevenuesAsProfessionalForDirectTaxPurposes,
             (string) $licenceInfo->FrenchTypeOfResidence ? $licenceInfo->FrenchTypeOfResidence : null,
             (string) $licenceInfo->FrenchCityTaxCategory ? $licenceInfo->FrenchCityTaxCategory : null,
             (string) $licenceInfo->TasmanianLicenceInfoTypeOfResidence ? $licenceInfo->TasmanianLicenceInfoTypeOfResidence : null,
@@ -510,6 +581,11 @@ class Prop extends Base {
         DB::statement($sql, array(
             (string) $this->property->ID
         ));
+
+        if(!$this->property->Distances ||
+           !$this->property->Distances->Distance){
+            return;
+        }
         
         foreach ($this->property->Distances->Distance as $distance) {
             
@@ -579,8 +655,14 @@ class Prop extends Base {
                 where
                     ID=?";
                         
-            $lastModNla = $this->property->LastMod->attributes()->NLA;
+            $lastModNla = (string) $this->property->LastMod->attributes()->NLA;
             $lastModNla = ($lastModNla && $lastModNla !== 'false') ? 1 : 0; 
+
+            $isActive = (string) $this->property->IsActive;
+            $isActive = ($isActive && $isActive !== 'false') ? 1 : 0; 
+
+            $isArchived = (string) $this->property->IsArchived;
+            $isArchived = ($isArchived && $isArchived !== 'false') ? 1 : 0;
 
             DB::statement($sql, array(
                 (string) $this->property->PUID,
@@ -591,10 +673,10 @@ class Prop extends Base {
                 (string) $this->property->DetailedLocationID,
                 (string) $this->property->DetailedLocationID->attributes()->TypeID,
                 (string) $this->property->LastMod,
-                (string) $lastModNla,
+                $lastModNla,
                 (string) is_int($this->property->IMAP) ? $this->property->IMAP : null,
-                (string) $this->property->IsActive ? 1 : 0,
-                (string) $this->property->IsArchived ? 1 : 0,
+                $isActive,
+                $isArchived,
                 (string) $this->property->CleaningPrice,
                 (string) $this->property->Space,
                 (string) $this->property->StandardGuests,
@@ -662,8 +744,14 @@ class Prop extends Base {
                         created_at=?,
                         updated_at=?;";
                         
-            $lastModNla = $this->property->LastMod->attributes()->NLA;
+            $lastModNla = (string) $this->property->LastMod->attributes()->NLA;
             $lastModNla = ($lastModNla && $lastModNla !== 'false') ? 1 : 0; 
+
+            $isActive = (string) $this->property->IsActive;
+            $isActive = ($isActive && $isActive !== 'false') ? 1 : 0; 
+
+            $isArchived = (string) $this->property->IsArchived;
+            $isArchived = ($isArchived && $isArchived !== 'false') ? 1 : 0;
 
             DB::statement($sql, array(
                 (string) $this->property->ID,
@@ -675,10 +763,10 @@ class Prop extends Base {
                 (string) $this->property->DetailedLocationID,
                 (string) $this->property->DetailedLocationID->attributes()->TypeID,
                 (string) $this->property->LastMod,
-                (string) $lastModNla,
+                $lastModNla,
                 (string) is_int($this->property->IMAP) ? $this->property->IMAP : null,
-                (string) $this->property->IsActive ? 1 : 0,
-                (string) $this->property->IsArchived ? 1 : 0,
+                $isActive,
+                $isArchived,
                 (string) $this->property->CleaningPrice,
                 (string) $this->property->Space,
                 (string) $this->property->StandardGuests,

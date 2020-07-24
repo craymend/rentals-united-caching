@@ -110,21 +110,21 @@ class PropertyPrices extends Base {
                 
                         if( isset($los->LOSPS->LOSP)) {
                             foreach ($los->LOSPS->LOSP as $losp) {
-                                
+
                                 $sql = "insert into 
                                         RentalsUnited_PropertyPricesLOSP
                                         set PropID=?, 
                                             PropertyPricesID=?,
                                             PropertyPricesLOSID=?,
-                                            NrOfGuests?,
+                                            NrOfGuests=?,
                                             Price=?,
                                             created_at=?;";
                                 DB::statement($sql, array(
                                     $propertyId,
                                     $propertyPricesID,
                                     $propertyPricesLOSID,
-                                    (string) $los->attributes()->NrOfGuests,
-                                    (string) $los->Price,
+                                    (string) $losp->attributes()->NrOfGuests,
+                                    (string) $losp->Price,
                                     date('Y-m-d H:i:s')
                                 ));
                             }

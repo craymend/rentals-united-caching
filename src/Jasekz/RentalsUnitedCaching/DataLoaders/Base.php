@@ -65,7 +65,8 @@ class Base {
             fclose($h);
         } 
         catch (Exception $e) {
-            throw $e;
+            echo "Exception: {$e->getMessage()}\r\n";
+            // throw $e;
         }
     }
 
@@ -86,7 +87,8 @@ class Base {
         } 
 
         catch (Exception $e) {
-            throw $e;
+            echo "Exception: {$e->getMessage()}\r\n";
+            // throw $e;
         }
     }
 
@@ -128,7 +130,7 @@ class Base {
         
         $owners = RentalsUnited::owners()->all();
         
-        if (! $owners->isEmpty()) {
+        if (!$owners->isEmpty()) {
             foreach ($owners as $owner) {
                 try {
                     RentalsUnited::dataLoader('ownerProperties')->cacheInDb($owner->OwnerID);
@@ -228,7 +230,7 @@ class Base {
 
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
-            throw $e;
+            // throw $e;
         }
     }
 
@@ -245,10 +247,9 @@ class Base {
         RentalsUnited::dataLoader('propertyPrices')->cacheInDb($propertyID);
         RentalsUnited::dataLoader('propertyDiscounts')->cacheInDb($propertyID);
         
-        try {
+        try{
             RentalsUnited::dataLoader('propertyAVBPrice')->cacheInDb($propertyID, date('Y-m-d'), date('Y-m-d', strtotime('+1 year')));
-        } 
-        catch (Exception $e) {
+        }catch(Exception $e){
             echo 'propertyAVBPrice: ' . $e->getMessage() . ' ' . date('Y-m-d') . ' through ' . date('Y-m-d', strtotime('+1 year')) . "\r\n";
         }
     }
@@ -268,7 +269,7 @@ class Base {
         }
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
-            throw $e;
+            // throw $e;
         }
     }
 
@@ -286,7 +287,7 @@ class Base {
         }
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
-            throw $e;
+            // throw $e;
         }
     }
 
@@ -303,7 +304,7 @@ class Base {
         }
         catch (Exception $e) {
             echo "Exception: {$e->getMessage()}\r\n";
-            throw $e;
+            // throw $e;
         }
     }
 

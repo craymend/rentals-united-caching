@@ -146,7 +146,26 @@ class Prop extends Base  {
 
     public function additionalFees()
     {
-        return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\PropAdditionalFees', 'PropID', 'ID')->orderBy('Order', 'ASC');
+        return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\PropAdditionalFees', 'PropID', 'ID')->orderBy('Order', 'ASC')->orderBy('DiscriminatorID', 'ASC');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullAddress(){
+        return $this->Street . ' ' . 
+               $this->location->Location . ' ' .
+               $this->location->parentLocation->Location . ' ' .
+               $this->ZipCode . ' ' .
+               $this->location->parentLocation->parentLocation->Location;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpaceInFeet(){
+        // multiply by 10.764 to convert m^2 to ft^2
+        return $this->Space * 10.764;
     }
 
     /**
@@ -175,7 +194,7 @@ class Prop extends Base  {
             }
         }
 
-        return $newPrice;
+        return round($newPrice, 2);
     }
 
     /**
@@ -208,7 +227,7 @@ class Prop extends Base  {
             }
         }
 
-        return $newPrice;
+        return round($newPrice, 2);
     }
 
     /**
@@ -237,7 +256,7 @@ class Prop extends Base  {
             }
         }
 
-        return $newPrice;
+        return round($newPrice, 2);
     }
 
     /**
@@ -270,7 +289,7 @@ class Prop extends Base  {
             }
         }
 
-        return $newPrice;
+        return round($newPrice, 2);
     }
 
     /**
@@ -300,6 +319,6 @@ class Prop extends Base  {
             }
         }
 
-        return $newPrice;
+        return round($newPrice, 2);
     }
 }
