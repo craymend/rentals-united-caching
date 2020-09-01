@@ -384,6 +384,38 @@ class RentalsUnited {
     $x = $this->curlPushBack($this->server_url, $post);  
     return $x;
   }  
+
+  /**
+   * Make an online booking for a property, in case of success returns a reservation ID
+   * 
+   * @param mixed $pid, property ID
+   * @param mixed $from, From date (yyyy-mm-dd) 
+   * @param mixed $to, To date (yyyy-mm-dd)
+   * @param mixed $argu, Number of available units
+   * @param mixed $argms, Minimum length of stay
+   * @param mixed $argc, Changeover type ID
+   * @return SimpleXMLElement
+   */
+  function PutAvbUnits(
+    $pid, $from, $to, $argu, $argms, $argc
+  ){
+  $post[] = "<Push_PutAvbUnits_RQ>
+              <Authentication>
+                <UserName>".$this->username."</UserName>
+                <Password>".$this->password."</Password>
+              </Authentication>
+              <MuCalendar PropertyID=\"$pid\">
+                <Date From=\"$from\" To=\"$to\">
+                  <U>$argu</U>
+                  <MS>$argms</MS>
+                  <C>$argc</C>
+                </Date>
+              </MuCalendar>
+            </Push_PutAvbUnits_RQ>";
+        
+  $x = $this->curlPushBack($this->server_url, $post);  
+  return $x;
+}  
     
   /**
    * Default Curl connection

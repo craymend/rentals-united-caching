@@ -440,4 +440,44 @@ class Base {
             echo "No properties to update\r\n";
         }
     }
+
+    /**
+     * putAvbUnits
+     *
+     * @return void
+     */
+    public function putAvbUnits($propertyId, $from, $to, $argu, $argms, $argc)
+    {
+        $fileName = 'PutAvbUnits_' . $propertyId . '_putAvbUnits.xml';
+        $ruFunction = 'PutAvbUnits';
+        
+        try {
+            $xml = $this->ru->{$ruFunction}($propertyId, $from, $to, $argu, $argms, $argc);
+            
+            $obj = simplexml_load_string($xml['messages']);
+            
+            if ((string) $obj->Status != 'Success') {
+                throw new Exception('Error downloading xml file. "' . $obj . '"');
+            }
+
+            echo "FileName (downloadXML): {$fileName}\r\n";
+
+            if($obj->ResponseID){
+                echo "ResponseID: {$obj->ResponseID}\r\n";
+            }
+                
+                // create cache dir, if it doesn't exist
+            if (! File::exists($this->getCacheDir())) {
+                File::makeDirectory($this->getCacheDir());
+            }
+            
+            $h = fopen($this->getCacheDir() . $fileName, 'w');
+            fwrite($h, $xml['messages']);
+            fclose($h);
+        } 
+        catch (Exception $e) {
+            echo "Exception: {$e->getMessage()}\r\n";
+            // throw $e;
+        }
+    }
 }

@@ -9,6 +9,7 @@ use Jasekz\RentalsUnitedCaching\Commands\CachePropertiesCommand;
 use Jasekz\RentalsUnitedCaching\Commands\UpdateChangeLogCommand;
 use Jasekz\RentalsUnitedCaching\Commands\UpdatePropertiesCommand;
 use Jasekz\RentalsUnitedCaching\Commands\CacheReservationsCommand;
+use Jasekz\RentalsUnitedCaching\Commands\PutAvbUnitsCommand;
 
 class RentalsUnitedCachingServiceProvider extends ServiceProvider {
 
@@ -33,6 +34,7 @@ class RentalsUnitedCachingServiceProvider extends ServiceProvider {
         $this->commands('command.ru.update_change_log');
         $this->commands('command.ru.update_properties');
         $this->commands('command.ru.cache_reservations');
+        $this->commands('command.ru.put_avb_units');
     }
 
     /**
@@ -68,6 +70,10 @@ class RentalsUnitedCachingServiceProvider extends ServiceProvider {
 
         $this->app->singleton('command.ru.cache_reservations', function ($app) {
             return new CacheReservationsCommand();
+        });
+
+        $this->app->singleton('command.ru.put_avb_units', function ($app) {
+            return new PutAvbUnitsCommand();
         });
     }
 }

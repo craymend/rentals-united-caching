@@ -165,7 +165,7 @@ class Reservations extends Base  {
                 (string) $this->reservation->CreditCard->Comments,
                 (string) $this->reservation->PMSReservationId,
                 (string) $this->reservation->CancelTypeID ? $record->CancelTypeID : null,
-                (string) $this->reservation->IsArchived ? 1 : 0,
+                (string) $this->reservation->IsArchived == 'true' ? 1 : 0,
                 date('Y-m-d H:i:s'),
                 $curResv->ID
             ));
