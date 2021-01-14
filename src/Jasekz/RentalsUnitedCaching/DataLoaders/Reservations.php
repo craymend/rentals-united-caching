@@ -141,10 +141,11 @@ class Reservations extends Base  {
                     id=?;";
 
             $statusID = $this->reservation->StatusID ? $this->reservation->StatusID : 0;
+            $lastMod = $this->reservation->LastMod ? $this->reservation->LastMod : date('Y-m-d h:i:s');
 
             DB::statement($sql, array(
                 (string) $statusID,
-                (string) $this->reservation->LastMod,
+                (string) $lastMod,
                 (string) $this->reservation->CustomerInfo->Name,
                 (string) $this->reservation->CustomerInfo->SurName,
                 (string) $this->reservation->CustomerInfo->Email,
@@ -200,10 +201,13 @@ class Reservations extends Base  {
                     created_at=?,
                     updated_at=?;";
 
+            $statusID = $this->reservation->StatusID ? $this->reservation->StatusID : 0;
+            $lastMod = $this->reservation->LastMod ? $this->reservation->LastMod : date('Y-m-d h:i:s');
+
             DB::statement($sql, array(
                 (string) $this->reservation->ReservationID,
-                (string) $this->reservation->StatusID ? $this->reservation->StatusID : 0,
-                (string) $this->reservation->LastMod,
+                (string) $statusID,
+                (string) $lastMod,
                 (string) $this->reservation->CustomerInfo->Name,
                 (string) $this->reservation->CustomerInfo->SurName,
                 (string) $this->reservation->CustomerInfo->Email,

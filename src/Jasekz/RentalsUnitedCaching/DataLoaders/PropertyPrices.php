@@ -49,7 +49,7 @@ class PropertyPrices extends Base {
         $fileName = 'PropertyID_' . $propertyId . '_' . $this->fileName;
 
         $dateFrom = date('Y-m-d');
-        $dateTo = date('Y-m-d', strtotime('+1 year'));
+        $dateTo = date('Y-m-d', strtotime('+2 year'));
         $pricingModelMode = 0; // standard/length of stay (LOS) pricing
         
         $this->downloadXML($fileName, $propertyId, $dateFrom, $dateTo, $pricingModelMode);
@@ -171,7 +171,7 @@ class PropertyPrices extends Base {
         $fileName = 'PropertyID_' . $propertyId . '_' . $this->fileName;
 
         $dateFrom = date('Y-m-d');
-        $dateTo = date('Y-m-d', strtotime('+1 year'));
+        $dateTo = date('Y-m-d', strtotime('+2 year'));
         $pricingModelMode = 1; // standard/length of stay (LOS) pricing
         
         $this->downloadXML($fileName, $propertyId, $dateFrom, $dateTo, $pricingModelMode);

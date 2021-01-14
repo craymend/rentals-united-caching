@@ -47,7 +47,7 @@ class PropertyBasePrice extends Base {
         
         $this->ruFunction = 'ListPropertyPrices';
         
-        $this->downloadXML($fileName, $propertyId, date('Y-m-d'), date('Y-m-d', strtotime('+1 year')));
+        $this->downloadXML($fileName, $propertyId, date('Y-m-d'), date('Y-m-d', strtotime('+2 year')));
         
         // get the lowest price
         $lowestPrice = null;

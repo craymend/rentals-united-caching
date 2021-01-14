@@ -37,7 +37,7 @@ class PropertyAvailabilityCalendar extends Base {
     {
         $fileName = 'PropertyID_' . $propertyId . '_' . $this->fileName;
         
-        $this->downloadXML($fileName, $propertyId, date('Y-m-d'), date('Y-m-d', strtotime('+1 year')));
+        $this->downloadXML($fileName, $propertyId, date('Y-m-d'), date('Y-m-d', strtotime('+2 year')));
         
         try {
             $sql = "delete from {$this->table} where PropID=?;";

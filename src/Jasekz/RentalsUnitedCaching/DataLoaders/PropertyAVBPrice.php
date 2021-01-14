@@ -36,7 +36,7 @@ class PropertyAVBPrice extends Base {
     public function cacheInDb($propertyId = null, $dateFrom = null, $dateTo = null)
     {
         $dateFrom = $dateFrom ? $dateFrom : date('Y-m-d');
-        $dateTo = $dateTo ? $dateTo : date('Y-m-d', strtotime('+1 year'));
+        $dateTo = $dateTo ? $dateTo : date('Y-m-d', strtotime('+2 year'));
         
         $fileName = 'PropertyID_' . $propertyId . '_' . $this->fileName;
         
