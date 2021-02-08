@@ -51,8 +51,8 @@ class CacheReservationsCommand extends Command {
          * Argument passed in can be an valid php strtotime arg - http://php.net/manual/en/function.strtotime.php
          * 
          * Examples:
-         * artisan rentals_united:update_properties --since="-1 month"
-         * artisan rentals_united:update_properties --since="2014-03-26 12:51:00"
+         * artisan rentals_united:cache_reservations --since="-1 month"
+         * artisan rentals_united:cache_reservations --since="2014-03-26 12:51:00"
          * 
          * When no option is passed, the default is -1 day
          * 
@@ -86,7 +86,6 @@ class CacheReservationsCommand extends Command {
             // Update change logs for all properties
             RentalsUnited::dataLoader()->cacheReservations($dateFrom, $dateTo);
         }
-
 
         $this->info(""); // newline
     }

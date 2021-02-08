@@ -301,7 +301,7 @@ class Reservations extends Base  {
                 (string) $ruPrice,
                 (string) $clientPrice,
                 (string) $alreadyPaid,
-                (string) $stayInfo->ResapaID,
+                (int) $stayInfo->ResapaID,
                 (string) $stayInfo->Comments,
                 (string) $stayInfo->MappingReservationID,
                 (string) $stayInfo->MappingStayID,
