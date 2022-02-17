@@ -17,7 +17,7 @@ class AdditionalFeeDiscriminators extends Base  {
                 $ret = '$' . number_format($value, 2, '.', '');
                 break;
             case 2:
-                $ret = $value . ' per day';
+                $ret = '$' . number_format($value, 2, '.', '') . ' per day';
                 break;
             case 3:
                 // independent

@@ -176,7 +176,7 @@ class Prop extends Base  {
      * 
      * @return float
      */
-    public function getAdditionalFeeBaseAmount($optionalFeeIds=[]){
+    public function getAdditionalFeeBaseAmount($optionalFeeIds=[], $numNights=0){
         $newPrice = $this->CleaningPrice;
 
         foreach($this->additionalFees as $fee){
@@ -187,6 +187,9 @@ class Prop extends Base  {
             switch($fee->DiscriminatorID){
                 case 1:
                     $newPrice += $fee->Value;
+                    break;
+                case 2:
+                    $newPrice += $fee->Value * $numNights;
                     break;
                 default:
                     // not handled
@@ -205,7 +208,7 @@ class Prop extends Base  {
      * 
      * @return float
      */
-    public function getAdditionalFeeTaxedAmount($optionalFeeIds=[]){
+    public function getAdditionalFeeTaxedAmount($optionalFeeIds=[], $numNights=0){
         $newPrice = 0;
         $newPrice = $this->CleaningPrice;
 
@@ -218,7 +221,11 @@ class Prop extends Base  {
                 case 1:
                     $newPrice += $fee->Value;
                     break;
+                case 2:
+                    $newPrice += $fee->Value * $numNights;
+                    break;
                 case 3:
+                case 4:
                     $newPrice *= (1 + $fee->Value);
                     break;
                 default:
@@ -248,6 +255,7 @@ class Prop extends Base  {
 
             switch($fee->DiscriminatorID){
                 case 3:
+                case 4:
                     $newPrice *= (1 + $fee->Value);
                     break;
                 default:
@@ -267,7 +275,7 @@ class Prop extends Base  {
      * 
      * @return float
      */
-    public function getTotalPrice($basePrice, $optionalFeeIds=[]){
+    public function getTotalPrice($basePrice, $optionalFeeIds=[], $numNights=0){
         $newPrice = $basePrice;
         $newPrice += $this->CleaningPrice;
 
@@ -280,7 +288,11 @@ class Prop extends Base  {
                 case 1:
                     $newPrice += $fee->Value;
                     break;
+                case 2:
+                    $newPrice += $fee->Value * $numNights;
+                    break;
                 case 3:
+                case 4:
                     $newPrice *= (1 + $fee->Value);
                     break;
                 default:
@@ -311,6 +323,7 @@ class Prop extends Base  {
                     $newPrice += $fee->Value;
                     break;
                 case 3:
+                case 4:
                     $newPrice *= (1 + $fee->Value);
                     break;
                 default:
