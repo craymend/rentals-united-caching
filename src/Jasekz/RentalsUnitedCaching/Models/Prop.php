@@ -176,7 +176,7 @@ class Prop extends Base  {
      * 
      * @return float
      */
-    public function getAdditionalFeeBaseAmount($optionalFeeIds=[], $numNights=0){
+    public function getAdditionalFeeBaseAmount($optionalFeeIds=[], $numNights=0, $numGuests=0){
         $newPrice = $this->CleaningPrice;
 
         foreach($this->additionalFees as $fee){
@@ -208,7 +208,7 @@ class Prop extends Base  {
      * 
      * @return float
      */
-    public function getAdditionalFeeTaxedAmount($optionalFeeIds=[], $numNights=0){
+    public function getAdditionalFeeTaxedAmount($optionalFeeIds=[], $numNights=0, $numGuests=0){
         $newPrice = 0;
         $newPrice = $this->CleaningPrice;
 
@@ -227,6 +227,9 @@ class Prop extends Base  {
                 case 3:
                 case 4:
                     $newPrice *= (1 + $fee->Value);
+                    break;
+                case 5:
+                    $newPrice += ($numGuests * $fee->Value);
                     break;
                 default:
                     // not handled
@@ -275,7 +278,7 @@ class Prop extends Base  {
      * 
      * @return float
      */
-    public function getTotalPrice($basePrice, $optionalFeeIds=[], $numNights=0){
+    public function getTotalPrice($basePrice, $optionalFeeIds=[], $numNights=0, $numGuests=0){
         $newPrice = $basePrice;
         $newPrice += $this->CleaningPrice;
 
@@ -294,6 +297,9 @@ class Prop extends Base  {
                 case 3:
                 case 4:
                     $newPrice *= (1 + $fee->Value);
+                    break;
+                case 5:
+                    $newPrice += ($numGuests * $fee->Value);
                     break;
                 default:
                     // not handled
@@ -325,6 +331,9 @@ class Prop extends Base  {
                 case 3:
                 case 4:
                     $newPrice *= (1 + $fee->Value);
+                    break;
+                case 5:
+                    $newPrice += ($numGuests * $fee->Value);
                     break;
                 default:
                     // not handled
