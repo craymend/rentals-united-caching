@@ -5,7 +5,7 @@ namespace Jasekz\RentalsUnitedCaching\Lib;
 class RentalsUnited {  
   private $username = null;
   private $password = null;
-  private $server_url = 'http://rm.rentalsunited.com/api/Handler.ashx';
+  private $server_url = 'https://rm.rentalsunited.com/api/Handler.ashx';
   
   public function __construct($username, $password) {
       $this->username = $username;

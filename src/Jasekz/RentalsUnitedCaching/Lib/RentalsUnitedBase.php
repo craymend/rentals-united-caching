@@ -73,7 +73,7 @@ class rentalsUnitedBase {
   
     private $username = '[your username here]'; //Your username provided by Rentals United
     private $password = '[your password here]'; //Your password provided by Rentals United
-    private $server_url = 'http://rm.rentalsunited.com/api/Handler.ashx';  
+    private $server_url = 'https://rm.rentalsunited.com/api/Handler.ashx';  
     
     public function __construct($username, $password) {
         $this->username = $username;
