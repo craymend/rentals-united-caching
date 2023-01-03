@@ -3,7 +3,7 @@
 [![Software License][ico-license]](LICENSE)
 
 
-Synchronize [Rentals United](http://rentalsunited.com/) data with your local database.  
+Synchronize [Rentals United](https://rentalsunited.com/) data with your local database.  
 
 ## Installation
 
