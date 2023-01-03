@@ -13,6 +13,15 @@ class RentalsUnited {
   }
 
   /**
+   * Get the base URL for the Rentals United API
+   * 
+   * @return string
+   */
+  public function getRuBaseUrl(){
+    return $this->server_url;
+  }
+
+  /**
    * Get a list of all the location where properties are provided
    * 
    * @return SimpleXMLElement
