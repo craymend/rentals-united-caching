@@ -1,12 +1,13 @@
 {
-    "name": "jasekz/rentals-united-caching",
-    "keywords": ["php","laravel 5","rentals united","rentalsunited.com", "data caching", "data sync"],
-    "description": "Rentals United (rentalsunited.com) data synchronization system for Laravel 5",
+    "name": "craymend/rentals-united-caching",
+    "keywords": ["php","rentals united","rentalsunited.com", "data caching", "data sync"],
+    "description": "Rentals United (rentalsunited.com) data synchronization system for Laravel",
     "license": "MIT",
     "authors": [
         {
-            "name": "Jasek Zbigniew",
-            "email": "zig@elegrit.com"
+            "name": "Cray Mend",
+            "email": "craymend1@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {},
