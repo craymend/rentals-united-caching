@@ -599,7 +599,7 @@ class CreateRentalsUnitedTables extends Migration {
         {
             $table->primary('ID');
             $table->integer('ID');
-            $table->string('Status');
+            $table->string('Status', 512);
             $table->timestamps();
         });
         Schema::create('RentalsUnited_PropTypes', function (Blueprint $table)
