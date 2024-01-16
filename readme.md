@@ -10,20 +10,9 @@ Synchronize [Rentals United](https://rentalsunited.com/) data with your local da
 NOTE: If you haven't set up a database yet for your app, please do that first as per Laravel docs -  https://laravel.com/docs/5.5/database.
 
 Via composer.<br/>
-Add the following to your composer.json
+
 ```
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/craymend/rentals-united-caching.git"
-    }
-],
-"require": {
-    "jasekz/rentals-united-caching": "dev-master"
-},
-```
-```
-composer update
+composer require craymend/rentals-united-caching
 ```
 
 Run 
