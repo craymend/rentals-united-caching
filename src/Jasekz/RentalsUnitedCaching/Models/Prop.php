@@ -1,8 +1,6 @@
 <?php
 namespace Jasekz\RentalsUnitedCaching\Models;
 
-use DB;
-
 class Prop extends Base  {
 
     protected $table = 'RentalsUnited_Prop';
@@ -149,173 +147,89 @@ class Prop extends Base  {
         return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\PropAdditionalFees', 'PropID', 'ID')->orderBy('Order', 'ASC')->orderBy('DiscriminatorID', 'ASC');
     }
 
+    public function requiredAdditionalFees()
+    {
+        return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\PropAdditionalFees', 'PropID', 'ID')->where('Optional', 0)->orderBy('DiscriminatorID', 'ASC');
+    }
+
+    public function optionalAdditionalFees()
+    {
+        return $this->hasMany('Jasekz\RentalsUnitedCaching\Models\PropAdditionalFees', 'PropID', 'ID')->where('Optional', 1)->orderBy('DiscriminatorID', 'ASC');
+    }
+
     /**
      * @return string
      */
     public function getFullAddress(){
         return $this->Street . ' ' . 
-               $this->location->Location . ' ' .
-               $this->location->parentLocation->Location . ' ' .
-               $this->ZipCode . ' ' .
-               $this->location->parentLocation->parentLocation->Location;
+            $this->location->Location . ' ' .
+            $this->location->parentLocation->Location . ' ' .
+            $this->ZipCode . ' ' .
+            $this->location->parentLocation->parentLocation->Location;
     }
 
     /**
      * @return float
      */
     public function getSpaceInFeet(){
-        // multiply by 10.764 to convert m^2 to ft^2
-        return $this->Space * 10.764;
+        return $this->Space * 10.764; // multiply by 10.764 to convert m^2 to ft^2
     }
 
     /**
-     * Get additional fees base amount
+     * Add required fees and taxes to provided price.
      * 
-     * WARNING: this function currently does not handle all types 
-     *  of Rentals United additional fees
+     * This value is required for the "ClientPrice" property when inserting a new reservation 
+     *   using the "PutConfirmedReservationMulti" method.
      * 
+     * "Final price for the guest."
+     * https://developer.rentalsunited.com/#put-confirmed-reservations
+     * 
+     * @param float $basePrice
+     * @param Illuminate\Support\Collection $optionalFees
+     * @param int $numNights
+     * @param int $numGuests
      * @return float
      */
-    public function getAdditionalFeeBaseAmount($optionalFeeIds=[], $numNights=0, $numGuests=0){
-        $newPrice = $this->CleaningPrice;
-
-        foreach($this->additionalFees as $fee){
-            if($fee->Optional && !in_array($fee->ID, $optionalFeeIds)){
-                continue;
-            }
-
-            switch($fee->DiscriminatorID){
-                case 1:
-                    $newPrice += $fee->Value;
-                    break;
-                case 2:
-                    $newPrice += $fee->Value * $numNights;
-                    break;
-                default:
-                    // not handled
-                    break;
-            }
-        }
-
-        return round($newPrice, 2);
-    }
-
-    /**
-     * Get additional fees base amount
-     * 
-     * WARNING: this function currently does not handle all types 
-     *  of Rentals United additional fees
-     * 
-     * @return float
-     */
-    public function getAdditionalFeeTaxedAmount($optionalFeeIds=[], $numNights=0, $numGuests=0){
-        $newPrice = 0;
-        $newPrice = $this->CleaningPrice;
-
-        foreach($this->additionalFees as $fee){
-            if($fee->Optional && !in_array($fee->ID, $optionalFeeIds)){
-                continue;
-            }
-
-            switch($fee->DiscriminatorID){
-                case 1:
-                    $newPrice += $fee->Value;
-                    break;
-                case 2:
-                    $newPrice += $fee->Value * $numNights;
-                    break;
-                case 3:
-                case 4:
-                    $newPrice *= (1 + $fee->Value);
-                    break;
-                case 5:
-                    $newPrice += ($numGuests * $fee->Value);
-                    break;
-                default:
-                    // not handled
-                    break;
-            }
-        }
-
-        return round($newPrice, 2);
-    }
-
-    /**
-     * Add independent tax fees to provided price
-     * 
-     * WARNING: this function currently does not handle all types 
-     *  of Rentals United additional fees
-     * 
-     * @return float
-     */
-    public function getTaxedBaseAmount($basePrice, $optionalFeeIds=[]){
+    public function getTotalPrice($basePrice, $optionalFees, $numNights=0, $numGuests=0){
         $newPrice = $basePrice;
 
+        $optionalFeeIds = $optionalFees->pluck('fee_id');
+
         foreach($this->additionalFees as $fee){
-            if($fee->Optional && !in_array($fee->ID, $optionalFeeIds)){
+            if($fee->Optional && !$optionalFeeIds->contains($fee->ID)){
                 continue;
             }
 
-            switch($fee->DiscriminatorID){
-                case 3:
-                case 4:
-                    $newPrice *= (1 + $fee->Value);
-                    break;
-                default:
-                    // not handled
-                    break;
+            $usage = null;
+            
+            if($fee->Optional){
+                $curOptionalFee = $optionalFees->where('fee_id', $fee->ID)->first();
+                $usage = $curOptionalFee['usage'];
             }
+
+            $prevAdditionalFees = $this->additionalFees->where('Order', '<', $fee->Order);
+
+            $newPrice += $fee->getFeeAmount($basePrice, $prevAdditionalFees, $numNights, $numGuests, $usage);
         }
 
         return round($newPrice, 2);
     }
 
     /**
-     * Add required fees and taxes to provided price
+     * This value is required for the "RUPrice" property when inserting a new reservation 
+     *   using the "PutConfirmedReservationMulti" method.
      * 
-     * WARNING: this function currently does not handle all types 
-     *  of Rentals United additional fees
+     * "The price returned by one of the RU methods for the property in the specified dates."
+     * https://developer.rentalsunited.com/#put-confirmed-reservations
      * 
+     * @param float $basePrice
+     * @param Illuminate\Support\Collection $optionalFees
+     * @param int $numNights
+     * @param int $numGuests
      * @return float
      */
-    public function getTotalPrice($basePrice, $optionalFeeIds=[], $numNights=0, $numGuests=0){
+    public function getRUPrice($basePrice, $numNights=0, $numGuests=0){
         $newPrice = $basePrice;
-        $newPrice += $this->CleaningPrice;
-
-        foreach($this->additionalFees as $fee){
-            if($fee->Optional && !in_array($fee->ID, $optionalFeeIds)){
-                continue;
-            }
-
-            switch($fee->DiscriminatorID){
-                case 1:
-                    $newPrice += $fee->Value;
-                    break;
-                case 2:
-                    $newPrice += $fee->Value * $numNights;
-                    break;
-                case 3:
-                case 4:
-                    $newPrice *= (1 + $fee->Value);
-                    break;
-                case 5:
-                    $newPrice += ($numGuests * $fee->Value);
-                    break;
-                default:
-                    // not handled
-                    break;
-            }
-        }
-
-        return round($newPrice, 2);
-    }
-
-    /**
-     * @return float
-     */
-    function getRUPrice($basePrice){
-        $newPrice = $basePrice;
-        $newPrice += $this->CleaningPrice;
 
         foreach($this->additionalFees as $fee){
             // Optional fees don't seem to be included in the RUPrice
@@ -323,24 +237,92 @@ class Prop extends Base  {
                 continue;
             }
 
-            // tax
-            switch($fee->DiscriminatorID){
-                case 1:
-                    $newPrice += $fee->Value;
-                    break;
-                case 3:
-                case 4:
-                    $newPrice *= (1 + $fee->Value);
-                    break;
-                case 5:
-                    $newPrice += ($numGuests * $fee->Value);
-                    break;
-                default:
-                    // not handled
-                    break;
-            }
+            $prevAdditionalFees = $this->additionalFees->where('Order', '<', $fee->Order);
+
+            $newPrice += $fee->getFeeAmount($basePrice, $prevAdditionalFees, $numNights, $numGuests);
         }
 
         return round($newPrice, 2);
+    }
+
+    /**
+     * Get list of additional fees.
+     * 
+     * @param float $basePrice
+     * @param Illuminate\Support\Collection $optionalFees
+     * @param int $numNights
+     * @param int $numGuests
+     * @return array
+     */
+    public function getAdditionalFeesList($basePrice, $optionalFees, $numNights=0, $numGuests=0){
+        $fees = [];
+        $taxTypeIds = AdditionalFeeTypes::getTaxTypeIds();
+
+        $optionalFeeIds = $optionalFees->pluck('fee_id');
+
+        foreach($this->additionalFees as $fee){
+            if($fee->Optional && !$optionalFeeIds->contains($fee->ID)){
+                continue;
+            }else if(in_array($fee->FeeTaxType, $taxTypeIds)){
+                continue;
+            }
+
+            $usage = null;
+            
+            if($fee->Optional){
+                $curOptionalFee = $optionalFees->where('fee_id', $fee->ID)->first();
+                $usage = $curOptionalFee['usage'];
+            }
+
+            $prevAdditionalFees = $this->additionalFees->where('Order', '<', $fee->Order);
+
+            $fees[] = [
+                'name' => $fee->Name,
+                'amount' => $fee->getFeeAmount($basePrice, $prevAdditionalFees, $numNights, $numGuests, $usage)
+            ];
+        }
+
+        return $fees;
+    }
+
+    /**
+     * Get list of additional taxes.
+     * 
+     * @param float $basePrice
+     * @param Illuminate\Support\Collection $optionalFees
+     * @param int $numNights
+     * @param int $numGuests
+     * @return array
+     */
+    public function getAdditionalTaxesList($basePrice, $optionalFees, $numNights=0, $numGuests=0){
+        $fees = [];
+        $taxTypeIds = AdditionalFeeTypes::getTaxTypeIds();
+
+        $optionalFeeIds = $optionalFees->pluck('fee_id');
+
+        foreach($this->additionalFees as $fee){
+            if($fee->Optional && !$optionalFeeIds->contains($fee->ID)){
+                continue;
+            }else if(!in_array($fee->FeeTaxType, $taxTypeIds)){
+                continue;
+            }
+
+            $usage = null;
+            
+            if($fee->Optional){
+                $curOptionalFee = $optionalFees->where('fee_id', $fee->ID)->first();
+                $usage = $curOptionalFee['usage'];
+            }
+
+            $prevAdditionalFees = $this->additionalFees->where('Order', '<', $fee->Order);
+
+            $fees[] = [
+                'name' => $fee->Name,
+                'amount' => $fee->getFeeAmount($basePrice, $prevAdditionalFees, $numNights, $numGuests, $usage),
+                'basePrice' => $basePrice,
+            ];
+        }
+
+        return $fees;
     }
 }
