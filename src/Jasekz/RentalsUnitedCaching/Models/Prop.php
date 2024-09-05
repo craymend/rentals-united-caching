@@ -193,6 +193,12 @@ class Prop extends Base  {
     public function getTotalPrice($basePrice, $optionalFees, $numNights=0, $numGuests=0){
         $newPrice = $basePrice;
 
+        // NOTE: on 2023-06-28, RentalsUnited removed the CleaningPrice from the property properties, 
+        //   but some properties still have it set. Supposedly it will be moved
+        //   to the "additionalFees" property and the old CleaningPrice will be set to 0 so this 
+        //   should still work correctly.
+        $newPrice += $this->CleaningPrice;
+
         $optionalFeeIds = $optionalFees->pluck('fee_id');
 
         foreach($this->additionalFees as $fee){
@@ -231,6 +237,12 @@ class Prop extends Base  {
     public function getRUPrice($basePrice, $numNights=0, $numGuests=0){
         $newPrice = $basePrice;
 
+        // NOTE: on 2023-06-28, RentalsUnited removed the CleaningPrice from the property properties, 
+        //   but some properties still have it set. Supposedly it will be moved
+        //   to the "additionalFees" property and the old CleaningPrice will be set to 0 so this 
+        //   should still work correctly.
+        $newPrice += $this->CleaningPrice;
+
         foreach($this->additionalFees as $fee){
             // Optional fees don't seem to be included in the RUPrice
             if($fee->Optional){
@@ -259,6 +271,17 @@ class Prop extends Base  {
         $taxTypeIds = AdditionalFeeTypes::getTaxTypeIds();
 
         $optionalFeeIds = $optionalFees->pluck('fee_id');
+
+        // NOTE: on 2023-06-28, RentalsUnited removed the CleaningPrice from the property properties, 
+        //   but some properties still have it set. Supposedly it will be moved
+        //   to the "additionalFees" property and the old CleaningPrice will be set to 0 so this 
+        //   should still work correctly.
+        if($this->CleaningPrice > 0){
+            $fees[] = [
+                'name' => 'Cleaning fee',
+                'amount' => $this->CleaningPrice
+            ];
+        }
 
         foreach($this->additionalFees as $fee){
             if($fee->Optional && !$optionalFeeIds->contains($fee->ID)){
