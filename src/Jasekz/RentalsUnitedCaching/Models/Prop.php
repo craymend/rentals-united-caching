@@ -191,13 +191,13 @@ class Prop extends Base  {
      * @return float
      */
     public function getTotalPrice($basePrice, $optionalFees, $numNights=0, $numGuests=0){
-        $newPrice = $basePrice;
-
         // NOTE: on 2023-06-28, RentalsUnited removed the CleaningPrice from the property properties, 
         //   but some properties still have it set. Supposedly it will be moved
         //   to the "additionalFees" property and the old CleaningPrice will be set to 0 so this 
         //   should still work correctly.
-        $newPrice += $this->CleaningPrice;
+        $basePrice += $this->CleaningPrice;
+
+        $newPrice = $basePrice;
 
         $optionalFeeIds = $optionalFees->pluck('fee_id');
 
@@ -235,13 +235,13 @@ class Prop extends Base  {
      * @return float
      */
     public function getRUPrice($basePrice, $numNights=0, $numGuests=0){
-        $newPrice = $basePrice;
-
         // NOTE: on 2023-06-28, RentalsUnited removed the CleaningPrice from the property properties, 
         //   but some properties still have it set. Supposedly it will be moved
         //   to the "additionalFees" property and the old CleaningPrice will be set to 0 so this 
         //   should still work correctly.
-        $newPrice += $this->CleaningPrice;
+        $basePrice += $this->CleaningPrice;
+
+        $newPrice = $basePrice;
 
         foreach($this->additionalFees as $fee){
             // Optional fees don't seem to be included in the RUPrice
